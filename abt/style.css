@@ -230,4 +230,11 @@ a:hover.linked {
         overflow-y: auto;
         margin: 60px 0;
     }
+    
+    #text-section {
+        padding: 0 25px 20px 12px;
+        display: block;
+        width: auto;
+        margin: 35px 0 0 15px;
+    }
 }
