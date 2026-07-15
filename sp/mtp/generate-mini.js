@@ -30,7 +30,7 @@ function generate() {
         document.getElementById("code1").style.display = "block";
         document.getElementById("code2").style.display = "block";
         document.getElementById("desc").style.textAlign = "left";
-        document.getElementById("desc").innerHTML = "The preview for your custom music player isn't viewable here, but it will appear correctly once installed.<br><br><b>First code:</b> Click once in the white box to select the script, then copy and paste it in your own code after <code>/body</code><br><br><b>Second code:</b> This is where you can add any amount of audio. Positioning and audio help is provided in the code comments. Paste this in your code after <code>body</code><br><br><span>💬 For additional support, reach me <a href = 'mailto:maddie.kahlon@proton.me'  target= '_blank'>here</a>.</span>";
+        document.getElementById("desc").innerHTML = "The preview for your custom music player isn't viewable here, but it will appear correctly once installed.<br><br><b>First code:</b> Click once in the white box to select the script, then copy and paste it in your own code after <code>/body</code><br><br><b>Second code:</b> This is where you can add any amount of audio. Positioning and audio help are provided in the code comments. Paste this in your code after <code>body</code><br><br><span>💬 For additional support, reach me <a href = 'mailto:maddie.kahlon@proton.me'  target= '_blank'>here</a>.</span>";
         var design = "#" + color + " " + autos + " ";
         var display = "0,0,";
         var limit, url, url2, title, title2;
