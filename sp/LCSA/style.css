@@ -1,0 +1,267 @@
+/**  
+
+Code by Maddie Kahlon
+
+*/
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 14px;
+    letter-spacing: 1px;
+    color: #363636;
+    background: #FFFFF2;
+}
+
+a {
+    text-decoration: none;
+    color: #6ACCAA;
+}
+
+::selection {
+    background: transparent;
+    color: #00E3D0;
+}
+
+::-moz-selection {
+    background: transparent;
+    color: #00E3D0;
+}
+
+#main {
+    width: 540px;
+    height: 340px;
+    position: fixed;
+    left: calc(50% + 7px);
+    top: 50%;
+    translate: -50% -50%;
+    transform-origin: center;
+}
+
+#title {
+    position: absolute;
+    width: 520px;
+    text-align: center;
+    margin-top: -100px;
+    font-size: 45px;
+    letter-spacing: 2px;
+    font-family: 'Waiting for the Sunrise', sans-serif;
+    cursor: default;
+    outline: none;
+}
+
+#footer {
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: 11px;
+    line-height: 11px;
+    left: 0;
+    bottom: 12px;
+}
+
+.clear {
+    clear: both;
+}
+
+#lcsa {
+    float: left;
+    width: 260px;
+    height: 340px;
+}
+
+#latin {
+    float: right;
+    width: 260px;
+    height: 340px;
+}
+
+.box1,
+.box2,
+.box3 {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #363636;
+    margin: 0 5px 5px 0;
+    float: left;
+    background: #FFF;
+}
+
+.box1:hover .tooltip,
+.box2:hover .tooltip {
+    visibility: visible;
+    display: inline-block;
+}
+
+.tooltip {
+    visibility: hidden;
+    background-color: #333;
+    color: #FFF;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.9em;
+}
+
+.c1box {
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+}
+
+.c2box {
+    position: absolute;
+    z-index: 2;
+    width: 35px;
+    height: 25px;
+    padding-top: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.c3box {
+    z-index: 3;
+    position: absolute;
+    width: 35px;
+    height: 25px;
+    padding-top: 10px;
+    text-align: center;
+    background: #F0FFF5;
+    opacity: 0;
+    cursor: default;
+}
+
+.wrong {
+    z-index: 4;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    background: #F07A96;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.seeme {
+    opacity: 1 !important;
+}
+
+.blue {
+    background: #EDF6FF !important;
+}
+
+.red {
+    background: #F1F1F1 !important;
+}
+
+#counter {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    display: none;
+}
+
+#x {
+    position: fixed;
+    top: 25px;
+    left: 5px;
+    display: none;
+}
+
+#main {
+    width: min(540px, 95vw);
+}
+
+#lcsa,
+#latin {
+    width: calc(50% - 10px);
+}
+
+#title {
+    width: 100%;
+}
+
+#desc {
+    position: absolute;
+    width: calc(100% - 45px);
+    left: -22px;
+    right: 0;
+    margin: -45px auto 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 14px;
+}
+
+.box2.show-tooltip .tooltip {
+    visibility: visible;
+    display: block;
+    opacity: 1;
+}
+
+@media (max-width: 560px) {
+    #main {
+        scale: 0.99;
+        left: calc(50% + 6px);
+    }
+}
+
+@media (max-width: 540px) {
+    #main {
+        scale: 0.99;
+        left: calc(50% + 20px);
+    }
+}
+
+@media (max-width: 526px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .tooltip {
+        position: fixed;
+        inset: 35vh auto auto 50%;
+        transform: translateX(-50%);
+        width: calc(100vw - 40px);
+        white-space: normal;
+        box-sizing: border-box;
+        visibility: hidden;
+        display: none;
+        z-index: 9999;
+        background: #333;
+        color: #FFF;
+    }
+
+    .box2.show-tooltip .c2box {
+        z-index: 10000;
+    }
+
+    #lcsa,
+    #latin {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        justify-content: center;
+        height: auto;
+    }
+
+    #main {
+        position: relative;
+        left: auto;
+        top: auto;
+        translate: none;
+        height: auto;
+        margin: 140px auto 0;
+        transform: translateX(3px);
+    }
+
+    #desc {
+        bottom: calc(100% + 25px);
+    }
+}

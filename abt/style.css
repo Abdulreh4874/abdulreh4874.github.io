@@ -1,0 +1,233 @@
+/**  
+
+Code by Maddie Kahlon
+
+*/
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #E8E8E8;
+}
+
+@font-face {
+    font-family: "Motterdam";
+    src: url("assets/Motterdam.ttf") format("truetype");
+}
+
+.credit {
+    position: fixed;
+    font-family: "Motterdam";
+    left: 10px;
+    bottom: 2px;
+}
+
+#content {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+#landing {
+    width: 350px;
+    height: 500px;
+    padding: 32px 60px 32px 30px;
+    background: #F4F4F4;
+    border-top-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border: 1px solid #D9DAE4;
+}
+
+#art {
+    width: fit-content;
+    margin: 0 auto 0 20px;
+    position: relative;
+    cursor: default;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#art #bot {
+    width: 250px;
+    opacity: 0.9;
+}
+
+.cog {
+    width: 100%;
+}
+
+#cog1 {
+    position: absolute;
+    margin: -50px 0 0 20px;
+    width: 50px;
+    opacity: 0.6;
+}
+
+#cog2 {
+    position: absolute;
+    margin: -160px 0 0 210px;
+    width: 50px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    color: #1D2943;
+    opacity: 0.9;
+}
+
+.script {
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 40px;
+    display: block;
+}
+
+.est {
+    font-size: 17px;
+    line-height: 17px;
+    font-weight: 200;
+    color: #000;
+    font-family: Courier, monospace;
+    padding-left: 1px;
+    margin: -3px 0 0 100px;
+    display: block;
+}
+
+.rotate1 {
+    animation: rotation1 18s infinite linear;
+}
+
+.rotate2 {
+    animation: rotation2 18s infinite linear;
+    opacity: 0.9;
+    width: 20px;
+    position: absolute;
+    margin: -62px 0 0 63px;
+    background: #FFF;
+    border-radius: 100px;
+}
+
+@keyframes rotation1 {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes rotation2 {
+    from {
+        transform: rotate(0);
+    }
+
+    to {
+        transform: rotate(-359deg);
+    }
+}
+
+#text-section {
+    width: 98%;
+    height: auto;
+    background: none;
+    margin: 30px 0 0 15px;
+    color: #495466;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 19.5px;
+    letter-spacing: 0.5px;
+    cursor: default;
+}
+
+#text-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+#text-section li {
+    margin-bottom: 15px;
+}
+
+::selection {
+    background: transparent;
+    color: #00C8FF;
+}
+
+::-moz-selection {
+    background: transparent;
+    color: #00C8FF;
+}
+
+strong {
+    color: #32AF12;
+}
+
+li strong {
+    color: #BABABA;
+    font-style: italic;
+}
+
+.linked {
+    color: #50527C;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+a.linked {
+    border-bottom: 1px solid #000;
+    cursor: pointer;
+}
+
+a:hover.linked {
+    color: #F00;
+    border-bottom: 1px solid #F00;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 500px) {
+    body {
+        background: #FFFDFA;
+    }
+
+    #landing {
+        background: #FFFDFA;
+        border: 0;
+        border-radius: 0;
+        box-sizing: border-box;
+        width: 100%;
+        height: auto;
+        padding: 0;
+    }
+
+    #text-section {
+        padding: 0 30px 20px;
+        display: block;
+        width: auto;
+    }
+
+    #art {
+        margin-left: calc(50% - 160px);
+    }
+
+    #art #bot {
+        width: 200px;
+    }
+
+    #cog2 {
+        margin: -140px 0 0 175px;
+    }
+
+    #cog1 {
+        margin: -30px 0 0 20px;
+        width: 40px;
+    }
+}
+
+@media screen and (max-height: 700px) and (max-width: 500px) {
+    #content {
+        display: block;
+        height: auto;
+        overflow-y: auto;
+        margin: 60px 0;
+    }
+}
