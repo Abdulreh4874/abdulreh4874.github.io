@@ -57,3 +57,28 @@ function generate() {
                 document.getElementById("code2").innerHTML = "<!--------------------------------------------------------------------------------  Positioning → The player is automatically positioned to be at the bottom left of your site. If you specifically want it somewhere, paste it there and replace BOTTOM with MARGIN-TOP and replace LEFT with MARGIN-LEFT. Adjust the margin numbers to your liking. Depending on your site's coding, you may have to remove POSITION:FIXED. Unlimited Audio → Simply separate the track URLs with a single space, and if you chose to display titles, separate with a single comma. --------------------------------------------------------------------------------> &lt;div id&equals;&quot;mtplayer&quot; style=&quot;bottom: 16px; left: 5px; position: fixed;&quot;&gt;&lt;span id&equals;&quot;multi-info&quot; style&equals;&quot;display: none;&quot;&gt;" + designcompressed + "&lt;&sol;span&gt;&lt;span id&equals;&quot;multi-names&quot; style&equals;&quot;display: none;&quot;&gt;" + displaycompressed + "&lt;&sol;span&gt;&lt;&sol;div&gt;";
         })();
 }
+function SelectText(element) {
+        var doc = document,
+                text = doc.getElementById(element),
+                range, selection;
+
+        if (doc.body.createTextRange) {
+                range = doc.body.createTextRange();
+                range.moveToElementText(text);
+                range.select();
+        } else if (window.getSelection) {
+                selection = window.getSelection();
+                range = doc.createRange();
+                range.selectNodeContents(text);
+                selection.removeAllRanges();
+                selection.addRange(range);
+        }
+}
+
+document.onclick = function(e) {
+        if (e.target.id === "code1") {
+                SelectText("code1");
+        } else if (e.target.id === "code2") {
+                SelectText("code2");
+        }
+};
