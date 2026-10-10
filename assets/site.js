@@ -95,6 +95,11 @@
     const themeBtn = root.dataset.mode ? '' :
       `<button class="tool" type="button" data-theme-toggle aria-label="Switch light or dark">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg></button>`;
+    const here = (PAGES.find(p => p[0] === page) || [])[2] || '';
+    const DESC = { engineering: 'Six live projects', design: 'Posters and campaigns', experience: 'WSO2, leadership, education', offhours: 'Sky and music, in red light' };
+    const mlinks = [['home', 'index.html', 'Index', 'Coffee runs through my circuits'], ...PAGES.map(([id, href, name]) => [id, href, name, DESC[id]])]
+      .map(([id, href, name, d], i) => `<li><a href="${href}"${id === page ? ' aria-current="page"' : ''}><span class="n">0${i}</span><b>${name}</b><small>${d}</small><span class="go" aria-hidden="true">→</span></a></li>`).join('');
+    const mTheme = root.dataset.mode ? '' : `<button class="pill" type="button" data-theme-toggle><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg>Light / dark</button>`;
     const html = `<header class="nav"><div class="wrap nav-in">
       <a class="brand" href="index.html" aria-label="Banuka Rajapaksha, home">${MARK(opts.draw)}<span>Banuka Rajapaksha</span></a>
       <ul class="nav-links">${links}</ul>
@@ -103,7 +108,18 @@
         <button class="tool" type="button" data-sound-toggle aria-pressed="${sound.on}" aria-label="Interface sound">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="w" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
         ${themeBtn}
-      </div></div></header>`;
+      </div>
+      ${here ? `<span class="here">${here}</span>` : ''}
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mmenu" aria-label="Menu"><i></i><i></i></button>
+      </div></header>
+      <div class="mmenu" id="mmenu" aria-label="Site menu">
+        <ol>${mlinks}</ol>
+        <div class="mfoot">
+          <div class="row">${mTheme}<button class="pill" type="button" data-sound-toggle aria-pressed="${sound.on}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>Sound</button></div>
+          <div class="row"><a class="pill" href="https://www.linkedin.com/in/banuka-rajapaksha" target="_blank" rel="noopener">LinkedIn ↗</a><a class="pill" href="https://github.com/PrageethBanuka" target="_blank" rel="noopener">GitHub ↗</a></div>
+          <span class="label" data-clock>Colombo --:--</span>
+        </div>
+      </div>`;
     document.currentScript.insertAdjacentHTML('beforebegin', html);
   }
   function footer(opts = {}) {
@@ -137,9 +153,22 @@
       window.dispatchEvent(new Event('br-theme'));
     }));
     document.querySelectorAll('[data-sound-toggle]').forEach(b => b.addEventListener('click', () => {
-      sound.on = !sound.on; store.set('br-sound', sound.on ? 'on' : 'off'); b.setAttribute('aria-pressed', sound.on);
+      sound.on = !sound.on; store.set('br-sound', sound.on ? 'on' : 'off'); document.querySelectorAll('[data-sound-toggle]').forEach(x => x.setAttribute('aria-pressed', sound.on));
       if (sound.on) blip('tone');
     }));
+    const mb = document.querySelector('.menu-btn'), mm = document.getElementById('mmenu');
+    if (mb && mm) {
+      const set = open => {
+        mb.setAttribute('aria-expanded', open); mm.classList.toggle('open', open); document.body.classList.toggle('menu-open', open);
+        mm.inert = !open; blip('tick');
+        if (open) setTimeout(() => (mm.querySelector('[aria-current]') || mm.querySelector('a')).focus({ preventScroll: true }), 80);
+      };
+      mm.inert = true;
+      mb.addEventListener('click', () => set(mb.getAttribute('aria-expanded') !== 'true'));
+      mm.addEventListener('click', e => { if (e.target.closest('a')) set(false); });
+      addEventListener('keydown', e => { if (e.key === 'Escape' && mm.classList.contains('open')) { set(false); mb.focus(); } });
+      matchMedia('(min-width: 861px)').addEventListener('change', e => { if (e.matches) set(false); });
+    }
     document.querySelectorAll('.nav-links a, .brand').forEach(a => {
       a.addEventListener('pointerenter', () => blip('tick'));
     });
