@@ -79,18 +79,25 @@
   }
 
   /* ---------- 4. type "coffee" for a refill ---------- */
+  function pour() {
+    let n = (+store.get('br-cups') || 0) + 1; store.set('br-cups', String(n));
+    document.querySelectorAll('.refill').forEach(x => x.remove());
+    const el = document.createElement('div'); el.className = 'refill'; el.setAttribute('role', 'status');
+    el.innerHTML = `<span class="cup" aria-hidden="true">☕<i></i><i></i><i></i></span><span class="label">Refilled. ${n === 1 ? 'Your first cup here.' : `Cup number ${n}.`}</span>`;
+    document.body.appendChild(el); BR.blip('tone', true);
+    setTimeout(() => el.classList.add('out'), 2200); setTimeout(() => el.remove(), 2900);
+  }
   function coffee() {
     let buf = '';
     addEventListener('keydown', e => {
       const t = e.target; if ((t && t.closest && t.closest('input, textarea, [contenteditable]')) || e.metaKey || e.ctrlKey || e.key.length !== 1) return;
       buf = (buf + e.key.toLowerCase()).slice(-6);
-      if (buf !== 'coffee') return;
-      buf = '';
-      let n = (+store.get('br-cups') || 0) + 1; store.set('br-cups', String(n));
-      const el = document.createElement('div'); el.className = 'refill'; el.setAttribute('role', 'status');
-      el.innerHTML = `<span class="cup" aria-hidden="true">☕<i></i><i></i><i></i></span><span class="label">Refilled. ${n === 1 ? 'Your first cup here.' : `Cup number ${n}.`}</span>`;
-      document.body.appendChild(el); BR.blip('tone', true);
-      setTimeout(() => el.classList.add('out'), 2200); setTimeout(() => el.remove(), 2900);
+      if (buf === 'coffee') { buf = ''; pour(); }
+    });
+    // the word "Coffee" in the home headline pours too (phones can't type it)
+    document.querySelectorAll('.cof').forEach(w => {
+      w.addEventListener('click', pour);
+      w.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pour(); } });
     });
   }
 
