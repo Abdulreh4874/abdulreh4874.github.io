@@ -89,7 +89,28 @@
     if (c.state !== 'running') { c.resume().then(() => play(c, kind)).catch(() => {}); return; }
     play(c, kind);
   }
+  function pourSound(c, big) {
+    const t0 = c.currentTime + 0.01, out = c.createGain(); out.gain.value = 0.9; out.connect(c.destination);
+    const tone = (f, t, dur, g, type = 'sine') => { const o = c.createOscillator(), e = c.createGain(); o.type = type; o.frequency.setValueAtTime(f, t);
+      e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(g, t + 0.004); e.gain.exponentialRampToValueAtTime(0.0001, t + dur); o.connect(e).connect(out); o.start(t); o.stop(t + dur + 0.02); return o; };
+    // 1. ceramic clink: two inharmonic partials, quick decay
+    tone(2380, t0, 0.22, 0.09); tone(3710, t0, 0.14, 0.045);
+    // 2. the pour: band-passed noise whose pitch rises as the cup fills
+    const len = 0.78, src = c.createBufferSource(); src.buffer = noiseBuf(c, len + 0.1);
+    const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 7;
+    bp.frequency.setValueAtTime(380, t0 + 0.08); bp.frequency.exponentialRampToValueAtTime(1500, t0 + 0.08 + len);
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3200;
+    const g = c.createGain(); g.gain.setValueAtTime(0, t0 + 0.08); g.gain.linearRampToValueAtTime(1.5, t0 + 0.14);
+    g.gain.setValueAtTime(1.4, t0 + 0.08 + len - 0.12); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.08 + len + 0.06);
+    const lfo = c.createOscillator(), depth = c.createGain(); lfo.frequency.value = 11; depth.gain.value = 0.4; lfo.connect(depth).connect(g.gain); // bubbly texture
+    src.connect(bp).connect(lp).connect(g).connect(out); src.start(t0 + 0.08); src.stop(t0 + 0.08 + len + 0.1); lfo.start(t0 + 0.08); lfo.stop(t0 + 0.08 + len + 0.1);
+    // 3. last drip
+    const d = tone(1250, t0 + 0.95, 0.09, 0.09); d.frequency.exponentialRampToValueAtTime(620, t0 + 1.0);
+    // milestone: a small two-note chime
+    if (big) { tone(659.25, t0 + 1.08, 0.5, 0.1, 'triangle'); tone(987.77, t0 + 1.2, 0.7, 0.08, 'triangle'); }
+  }
   function play(c, kind) {
+    if (kind === 'pour' || kind === 'pour-big') return pourSound(c, kind === 'pour-big');
     const t0 = c.currentTime;
     if (kind === 'tick') {
       const s = c.createBufferSource(); s.buffer = noiseBuf(c, 0.05);
@@ -326,7 +347,7 @@
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', wire) : wire();
 
   // moments (time-based features) and the hidden trail load on every page
-  ['moments.js', 'secret.js', 'extras.js'].forEach(f => { const el = document.createElement('script'); el.src = 'assets/' + f + '?v=20261011f'; document.head.appendChild(el); });
+  ['moments.js', 'secret.js', 'extras.js'].forEach(f => { const el = document.createElement('script'); el.src = 'assets/' + f + '?v=20261011g'; document.head.appendChild(el); });
 
   window.BR = { Spring, project, rubber, clamp, tracker, reduce, RM, blip, sound, ac, noiseBuf, nav, footer, store };
 })();

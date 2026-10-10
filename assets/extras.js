@@ -119,7 +119,7 @@
     const msg = CUPS[n] || MORE[(n * 7) % MORE.length](n);
     const el = document.createElement('div'); el.className = 'refill' + (n >= 6 ? ' jitter' : '') + (n >= 10 ? ' strong' : ''); el.setAttribute('role', 'status');
     el.innerHTML = `<span class="cup" aria-hidden="true">☕<i></i><i></i><i></i></span><span class="label">${msg}</span>`;
-    document.body.appendChild(el); BR.blip('tone', true);
+    document.body.appendChild(el); BR.blip(MILESTONES.has(n) ? 'pour-big' : 'pour', true);
     if (MILESTONES.has(n) && BR.burst && !BR.reduce()) { const r = el.querySelector('.cup').getBoundingClientRect(); BR.burst(r.left + r.width / 2, r.top + r.height / 2, 70); }
     const stay = 2200 + msg.length * 25;
     setTimeout(() => el.classList.add('out'), stay); setTimeout(() => el.remove(), stay + 700);
