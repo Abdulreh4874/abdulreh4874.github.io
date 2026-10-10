@@ -123,21 +123,42 @@
   const ink = () => getComputedStyle(root).getPropertyValue('--ink').trim();
   const acc = () => getComputedStyle(root).getPropertyValue('--accent').trim();
 
+  /* ---------- notification cards ----------
+     Each card has: a priority, the Colombo hours when it is relevant, and how often it may appear
+     ('day' = once a day, 'season' = once per season, 'visit' = once per browser session).
+     Only the single most relevant card shows on a page, after the intro has finished. */
   const queue = [];
-  function toast(id, kicker, html) {
-    const k = `br-m-${id}-${C.key}`;
-    if (!preview) { try { if (localStorage.getItem(k)) return; } catch (e) {} }
-    (id === preview ? queue.unshift : queue.push).call(queue, { k, kicker, html });
+  const inHours = ([a, b]) => a <= b ? C.h >= a && C.h < b : C.h >= a || C.h < b;
+  function toast(id, kicker, html, o = {}) {
+    const { prio = 50, hours = [0, 24], once = 'day', season = C.y } = o;
+    if (!preview && !inHours(hours)) return;
+    const k = once === 'season' ? `br-m-${id}-${season}` : `br-m-${id}-${C.key}`;
+    if (!preview) {
+      try { if ((once === 'visit' ? sessionStorage : localStorage).getItem(k)) return; } catch (e) {}
+    }
+    queue.push({ id, k, kicker, html, once, prio: id === preview ? 1000 : prio });
   }
   function flush() {
-    const t = queue.shift(); if (!t) return;
+    if (!queue.length) return;
+    queue.sort((a, b) => b.prio - a.prio);
+    const t = queue[0]; queue.length = 0; // one card per page
     const el = document.createElement('div'); el.className = 'm-toast'; el.setAttribute('role', 'status');
     el.innerHTML = `<span class="ic" aria-hidden="true"></span><div><span class="k">${t.kicker}</span>${t.html}</div><button type="button" aria-label="Dismiss">✕</button>`;
     document.body.appendChild(el);
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('in')));
-    const close = () => { el.classList.remove('in'); try { localStorage.setItem(t.k, '1'); } catch (e) {} setTimeout(() => { el.remove(); flush(); }, 700); };
+    const seen = () => { try { (t.once === 'visit' ? sessionStorage : localStorage).setItem(t.k, '1'); } catch (e) {} };
+    seen(); // count it as shown once it has appeared
+    let left = 9000 + t.html.length * 35, last = performance.now(), paused = false, timer = 0;
+    const close = () => { clearInterval(timer); el.classList.remove('in'); setTimeout(() => el.remove(), 700); };
+    timer = setInterval(() => { const now = performance.now(); if (!paused && !document.body.classList.contains('menu-open')) left -= now - last; last = now; if (left <= 0) close(); }, 250);
+    el.addEventListener('pointerenter', () => { paused = true; }); el.addEventListener('pointerleave', () => { paused = false; });
+    el.addEventListener('focusin', () => { paused = true; }); el.addEventListener('focusout', () => { paused = false; });
     el.querySelector('button').addEventListener('click', close);
-    setTimeout(close, 12000);
+  }
+  function whenReady(fn) { // wait for the intro to finish, then a short beat
+    const go = () => setTimeout(fn, 1400);
+    const check = () => document.querySelector('.intro') ? setTimeout(check, 250) : go();
+    check();
   }
 
   /* ---------- particles: snow (as falling stars), meteors, bursts ---------- */
@@ -189,11 +210,13 @@
 
   function start() {
     const still = reduce();
-    if (on.has('snow')) { if (!still) snow(); toast('snow', 'December', 'Falling stars until the new year. My old site had snow. This is the upgrade.'); }
+    if (on.has('snow')) { if (!still) snow(); toast('snow', 'December', 'Falling stars until the new year. My old site had snow. This is the upgrade.', { prio: 30, once: 'season', season: C.m === 12 ? C.y : C.y - 1 }); }
     if (on.has('meteors')) {
       const s = shower || SHOWERS[4];
       const near = Math.abs(md - s.peak) <= 2;
-      toast('meteors', `${s.id} meteor shower`, `Active now, peak on ${fmtPeak(s.peak)}. From Sri Lanka, look ${s.look}.${night || preview ? ' Watch this page for a while.' : ' Come back after dark.'}`);
+      const peakTonight = Math.abs(md - s.peak) <= 1;
+      if (night || C.h >= 18 || C.h < 5) toast('meteors', `${s.id} meteor shower`, `${peakTonight ? 'Peak night.' : `Active now, peak on ${fmtPeak(s.peak)}.`} Look ${s.look}. A few are falling across this page too.`, { prio: peakTonight ? 90 : 60, hours: [18, 5] });
+      else if (peakTonight) toast('meteors', `${s.id} peak tonight`, `The ${s.id} peak tonight. After dark, look ${s.look}. Come back then and this page will show a few too.`, { prio: 85, hours: [6, 18] });
       if ((night || preview) && !still) {
         const next = () => setTimeout(() => { meteor(); next(); }, (near ? 2500 : 6000) + Math.random() * (near ? 4000 : 9000));
         setTimeout(meteor, 1500); next();
@@ -202,7 +225,10 @@
     if (on.has('poya') || on.has('vesak')) {
       const g = document.createElement('div'); g.className = 'm-moonglow'; g.setAttribute('aria-hidden', 'true'); document.body.prepend(g);
     }
-    if (on.has('poya')) toast('poya', 'Poya', 'Full moon over Sri Lanka today. A good night to look up.');
+    if (on.has('poya')) {
+      if (C.h >= 17 || C.h < 5) toast('poya', 'Poya · full moon', 'The full Moon is up over Sri Lanka tonight. Step outside and look east.', { prio: 70, hours: [17, 5] });
+      else toast('poya', 'Poya', 'Full moon day. It rises in the east around sunset tonight.', { prio: 55, hours: [5, 17] });
+    }
     if (on.has('vesak')) {
       const L = document.createElement('div'); L.className = 'lanterns'; L.setAttribute('aria-hidden', 'true');
       const lantern = (len, s) => `<svg class="lantern" width="${46 * s}" height="${(len + 92) * s}" viewBox="0 0 46 ${len + 92}"><line x1="23" y1="0" x2="23" y2="${len}" stroke="var(--ink-3)" stroke-width="1"/>
@@ -210,21 +236,21 @@
         <path d="M14 70 L12 90 M23 70 V92 M32 70 L34 90" stroke="var(--ink-3)"/></g></svg>`;
       L.innerHTML = lantern(40, 1) + lantern(90, 0.85) + lantern(20, 0.75);
       document.body.appendChild(L);
-      toast('vesak', 'Vesak', 'Suba Vesak. Lanterns are up in my sky tonight.');
+      toast('vesak', 'Vesak', C.h >= 17 || C.h < 5 ? 'Suba Vesak. The lanterns are lit in my sky tonight.' : 'Suba Vesak. The lanterns are up for the day.', { prio: 95 });
     }
-    if (on.has('avurudu')) toast('avurudu', 'Aluth Avurudu', 'Suba Aluth Avurudu. Happy Sinhala and Tamil New Year. The drum machine on Off-hours has a raban rhythm today.');
+    if (on.has('avurudu')) toast('avurudu', 'Aluth Avurudu', 'Suba Aluth Avurudu. Happy Sinhala and Tamil New Year. The drum machine on Off-hours has a raban rhythm today.', { prio: 95, hours: [6, 24] });
     if (on.has('nye')) {
       BR.clockSuffix = () => { const now = new Date(), t = Date.UTC(C.y + 1, 0, 1, -5, -30) - now; if (t <= 0) return ''; const h = Math.floor(t / 36e5), m = Math.floor(t / 6e4) % 60; return ` · ${C.y + 1} in ${h}h ${m}m`; };
-      toast('nye', 'Countdown', `${C.y + 1} is almost here. The clock up top is counting down.`);
+      toast('nye', 'Countdown', `${C.y + 1} is almost here. The clock up top is counting down.`, { prio: 95, hours: [18, 24] });
     }
-    if (on.has('newyear')) { if (!still) setTimeout(() => burst(), 900); toast('newyear', 'Happy New Year', 'A new orbit begins. Thanks for stopping by.'); }
-    if (on.has('birthday')) { if (!still) setTimeout(() => burst(innerWidth / 2, innerHeight / 3, 140), 900); toast('birthday', 'Today', 'It’s my birthday. One more trip around the Sun.'); }
+    if (on.has('newyear')) { if (!still) setTimeout(() => burst(), 900); toast('newyear', 'Happy New Year', 'A new orbit begins. Thanks for stopping by.', { prio: 100 }); }
+    if (on.has('birthday')) { if (!still) setTimeout(() => burst(innerWidth / 2, innerHeight / 3, 140), 900); toast('birthday', 'Today', 'It’s my birthday. One more trip around the Sun.', { prio: 100 }); }
     if (on.has('coffee')) { document.querySelectorAll('.brand .star').forEach(s => s.classList.add('steam')); BR.clockSuffix = BR.clockSuffix || ' · brewing ☕'; }
     if (on.has('latenight')) BR.clockSuffix = BR.clockSuffix || ' · probably stargazing';
-    if (on.has('spaceweek')) toast('spaceweek', 'World Space Week', 'It runs 4 to 10 October. Fitting, for a site that turns into a night sky.');
-    if (on.has('xtreme')) toast('xtreme', 'On this day, 2024', 'IEEEXtreme 18.0: #418 in the world, #22 in Sri Lanka, in 24 hours straight.');
-    if (on.has('wso2')) toast('wso2', 'On this day, 2026', 'I started at WSO2 on the OpenChoreo team.');
-    setTimeout(flush, 1600);
+    if (on.has('spaceweek')) toast('spaceweek', 'World Space Week', 'It runs 4 to 10 October. Fitting, for a site that turns into a night sky.', { prio: 40, once: 'season' });
+    if (on.has('xtreme')) toast('xtreme', 'On this day, 2024', 'IEEEXtreme 18.0: #418 in the world, #22 in Sri Lanka, in 24 hours straight.', { prio: 80 });
+    if (on.has('wso2')) toast('wso2', 'On this day, 2026', 'I started at WSO2 on the OpenChoreo team.', { prio: 80 });
+    whenReady(flush);
     window.dispatchEvent(new CustomEvent('br-moments', { detail: [...on] }));
   }
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', start) : start();
