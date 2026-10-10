@@ -79,13 +79,50 @@
   }
 
   /* ---------- 4. type "coffee" for a refill ---------- */
+  // what the barista says, by cup number
+  const CUPS = {
+    1: 'Refilled. Your first cup here.',
+    2: 'Cup 2. Now we’re talking.',
+    3: 'Cup 3. My usual before standup.',
+    4: 'Cup 4. Your code just compiled faster.',
+    5: 'Cup 5. You can hear colours now.',
+    6: 'Cup 6. Same as me in exam week at Ruhuna.',
+    7: 'Cup 7. Heart rate: 96 BPM. In sync with the site.',
+    8: 'Cup 8. The RoboEyes look worried about you.',
+    9: 'Cup 9. AdaptiFocus says: take a break.',
+    10: 'Cup 10. Achievement unlocked: Night Shift.',
+    12: 'Cup 12. A dozen. Barista mode on.',
+    13: 'Cup 13. Unlucky? Not at this caffeine level.',
+    15: 'Cup 15. Sleep is now a deprecated feature.',
+    20: 'Cup 20. Your heartbeat is in 4/4 time.',
+    24: 'Cup 24. One for every hour of IEEEXtreme.',
+    42: 'Cup 42. The answer to everything, apparently.',
+    50: 'Cup 50. You are officially part of the circuit.',
+    96: 'Cup 96. Locked to the beat. 96 BPM.',
+    100: 'Cup 100. Okay, message me. Next one is on me.',
+    256: 'Cup 256. 8-bit overflow. Counter wrapped to 0… just kidding.',
+  };
+  const MORE = [
+    n => `Cup ${n}. Still not decaf.`,
+    n => `Cup ${n}. git commit -m "more coffee"`,
+    n => `Cup ${n}. Error 404: sleep not found.`,
+    n => `Cup ${n}. Kubernetes autoscaled your mug.`,
+    n => `Cup ${n}. Your blood type is now espresso.`,
+    n => `Cup ${n}. Rolling out caffeine to 100% of traffic.`,
+    n => `Cup ${n}. The Moon called. It wants its sleep back.`,
+    n => `Cup ${n}. Ceylon tea is getting jealous.`,
+  ];
+  const MILESTONES = new Set([10, 24, 42, 50, 96, 100, 256]);
   function pour() {
     let n = (+store.get('br-cups') || 0) + 1; store.set('br-cups', String(n));
     document.querySelectorAll('.refill').forEach(x => x.remove());
-    const el = document.createElement('div'); el.className = 'refill'; el.setAttribute('role', 'status');
-    el.innerHTML = `<span class="cup" aria-hidden="true">☕<i></i><i></i><i></i></span><span class="label">Refilled. ${n === 1 ? 'Your first cup here.' : `Cup number ${n}.`}</span>`;
+    const msg = CUPS[n] || MORE[(n * 7) % MORE.length](n);
+    const el = document.createElement('div'); el.className = 'refill' + (n >= 6 ? ' jitter' : '') + (n >= 10 ? ' strong' : ''); el.setAttribute('role', 'status');
+    el.innerHTML = `<span class="cup" aria-hidden="true">☕<i></i><i></i><i></i></span><span class="label">${msg}</span>`;
     document.body.appendChild(el); BR.blip('tone', true);
-    setTimeout(() => el.classList.add('out'), 2200); setTimeout(() => el.remove(), 2900);
+    if (MILESTONES.has(n) && BR.burst && !BR.reduce()) { const r = el.querySelector('.cup').getBoundingClientRect(); BR.burst(r.left + r.width / 2, r.top + r.height / 2, 70); }
+    const stay = 2200 + msg.length * 25;
+    setTimeout(() => el.classList.add('out'), stay); setTimeout(() => el.remove(), stay + 700);
   }
   function coffee() {
     let buf = '';

@@ -407,3 +407,10 @@ a, button, [role="button"], summary { -webkit-tap-highlight-color: transparent; 
 @media (max-width: 600px) {
   .m-toast { left: 12px; right: 12px; max-width: none; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); }
 }
+
+/* the more you drink, the more the mug shakes */
+.refill.jitter .cup { animation: jitter 0.12s linear infinite; }
+.refill.strong .cup { font-size: 72px; }
+.refill.strong .cup i { height: 30px; }
+@keyframes jitter { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(-1px, 1px) rotate(-1deg); } 50% { transform: translate(1px, -1px); } 75% { transform: translate(1px, 1px) rotate(1deg); } }
+@media (prefers-reduced-motion: reduce) { .refill.jitter .cup { animation: none; } }
