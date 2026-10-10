@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Engineering · Banuka Rajapaksha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0B0E13">
+<meta name="description" content="Banuka Rajapaksha: computer engineer and designer in Colombo. Software Engineer Intern at WSO2 (OpenChoreo). Coffee runs through my circuits.">
+<meta property="og:title" content="Banuka Rajapaksha">
+<meta property="og:description" content="Computer engineer and designer. Coffee runs through my circuits.">
+<meta property="og:url" content="https://prageethbanuka.github.io/">
+
+<style>
+.ch-index { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--ink); }
+.ch-index a { padding: 14px 16px; text-decoration: none; display: grid; gap: 4px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); transition: background-color var(--q); }
+.ch-index a:nth-child(3n) { border-right: 0; }
+.ch-index a:hover { background: var(--line-2); }
+.ch-index b { font-weight: 500; font-size: 0.98rem; letter-spacing: -0.01em; }
+@media (max-width: 860px) { .ch-index { grid-template-columns: 1fr 1fr; } .ch-index a { border-right: 0; padding-left: 0; } }
+.group-head { padding-block: clamp(64px, 9vw, 120px) 0; border-top: 1px solid var(--line); }
+.solo { color: var(--accent); }
+
+/* AdaptiFocus */
+.af { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); background: var(--screen); color: var(--screen-ink); border-radius: 14px; overflow: hidden; min-height: 320px; }
+.af canvas { width: 100%; height: 100%; display: block; min-height: 220px; }
+.af .agents { border-left: 1px solid rgba(232,234,230,.1); padding: 14px; display: flex; flex-direction: column; gap: 8px; font-family: var(--f-mono); font-size: 0.72rem; overflow: hidden; max-height: 340px; }
+.af .agents p { margin: 0; line-height: 1.45; color: rgba(232,234,230,.78); animation: msgIn var(--h) var(--ease-out) both; }
+.af .agents p b { font-weight: 500; color: #3CC2B4; }
+.af .agents p.warn b { color: #FF4A3D; }
+@keyframes msgIn { from { opacity: 0; transform: translateY(6px); } }
+@media (max-width: 620px) { .af { grid-template-columns: 1fr; } .af .agents { border-left: 0; border-top: 1px solid rgba(232,234,230,.1); max-height: 200px; } }
+
+/* SmartExpense pipeline */
+.pipe { background: var(--screen); color: var(--screen-ink); border-radius: 14px; overflow: hidden; }
+.stages { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0; border-bottom: 1px solid rgba(232,234,230,.1); }
+.stage { padding: 14px 10px; display: grid; gap: 8px; border-right: 1px solid rgba(232,234,230,.08); font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: 0.03em; color: rgba(232,234,230,.55); }
+.stage:last-child { border-right: 0; }
+.stage i { height: 3px; border-radius: 2px; background: rgba(232,234,230,.12); position: relative; overflow: hidden; }
+.stage i::after { content: ""; position: absolute; inset: 0; transform: scaleX(var(--p, 0)); transform-origin: left; background: #3CC2B4; }
+.stage.run { color: #fff; } .stage.ok { color: #3CC2B4; } .stage.fail { color: #FF4A3D; } .stage.fail i::after { background: #FF4A3D; }
+.term { font-family: var(--f-mono); font-size: 0.74rem; padding: 14px 16px; height: 210px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px; color: rgba(232,234,230,.7); }
+.term .e { color: #FF4A3D; } .term .g { color: #3CC2B4; }
+@media (max-width: 620px) { .stages { grid-template-columns: repeat(4, minmax(0, 1fr)); } .stage:nth-child(4) { border-right: 0; } }
+.toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--ink-2); cursor: pointer; }
+.toggle input { accent-color: var(--accent); width: 16px; height: 16px; }
+
+.channel .main { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px 48px; align-items: start; }
+@media (max-width: 1060px) { .channel .main { grid-template-columns: 1fr; } }
+.ch-meta { display: grid; gap: 14px; align-content: start; }
+.ch-meta .chips { margin-top: 2px; }
+.ch-meta a { font-size: 0.9rem; }
+.ch-copy { display: grid; gap: 18px; align-content: start; }
+.ch-copy dl { margin: 0; display: grid; gap: 14px; }
+.ch-copy dt { font-family: var(--f-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.ch-copy dd { margin: 3px 0 0; color: var(--ink-2); }
+.ch-copy .stat { font-family: var(--f-mono); font-size: 0.8rem; color: var(--ink); border-top: 1px solid var(--line); padding-top: 12px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.ch-copy .stat b { color: var(--accent); font-weight: 500; }
+
+.device { position: relative; background: var(--screen); border-radius: 14px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 30px 60px -30px rgba(0,0,0,.45); }
+.device canvas { display: block; width: 100%; height: auto; }
+.device .hud { position: absolute; left: 14px; right: 14px; top: 10px; display: flex; justify-content: space-between; gap: 10px; pointer-events: none; }
+.device .hud .label { color: rgba(232,234,230,.55); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+.controls .seg button { font-size: 0.8rem; padding: 5px 12px; }
+.note { font-family: var(--f-mono); font-size: 0.6875rem; color: var(--ink-3); margin-top: 10px; line-height: 1.5; }
+
+/* RISC */
+.cpu { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 0; background: var(--screen); color: var(--screen-ink); border-radius: 14px; overflow: hidden; font-family: var(--f-mono); font-size: 0.8rem; }
+.cpu .asm { padding: 16px 0; border-right: 1px solid rgba(232,234,230,.1); }
+.cpu .asm div { display: grid; grid-template-columns: 38px 1fr; padding: 2px 16px; color: rgba(232,234,230,.55); white-space: nowrap; }
+.cpu .asm div.pc { color: #fff; background: rgba(255,74,61,.16); box-shadow: inset 2px 0 0 #FF4A3D; }
+.cpu .regs { padding: 16px; display: grid; gap: 10px; align-content: start; }
+.reg { display: grid; grid-template-columns: 26px auto 1fr; gap: 10px; align-items: center; }
+.reg .bits { display: flex; gap: 4px; }
+.reg .bits i { width: 9px; height: 9px; border-radius: 50%; background: rgba(232,234,230,.12); transition: background-color 120ms, box-shadow 120ms; }
+.reg .bits i.on { background: #FF4A3D; box-shadow: 0 0 8px rgba(255,74,61,.7); }
+.reg .v { text-align: right; color: rgba(232,234,230,.7); font-variant-numeric: tabular-nums; }
+.flags { display: flex; gap: 14px; color: rgba(232,234,230,.45); padding-top: 4px; }
+.flags .on { color: #FF4A3D; }
+.tape { grid-column: 1 / -1; border-top: 1px solid rgba(232,234,230,.1); padding: 12px 16px; color: rgba(232,234,230,.75); min-height: 44px; overflow-wrap: anywhere; }
+@media (max-width: 520px) { .cpu { grid-template-columns: 1fr; } .cpu .asm { border-right: 0; border-bottom: 1px solid rgba(232,234,230,.1); } }
+
+/* xtreme */
+.xt-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px; align-items: end; margin-bottom: 28px; }
+.xt-num { font-weight: 600; font-stretch: 80%; letter-spacing: -0.045em; font-size: clamp(4rem, 12vw, 11rem); line-height: 0.85; }
+.xt-num .of { color: var(--ink-3); font-size: 0.32em; letter-spacing: -0.02em; font-stretch: 90%; }
+.xt-wrap { position: relative; }
+.xt-wrap canvas { width: 100%; display: block; cursor: crosshair; }
+.xt-tip { position: absolute; pointer-events: none; padding: 4px 8px; border-radius: 6px; background: var(--ink); color: var(--bg); font-family: var(--f-mono); font-size: 0.72rem; transform: translate(-50%, -140%); white-space: nowrap; opacity: 0; transition: opacity var(--q); }
+@media (max-width: 860px) { .xt-head { grid-template-columns: 1fr; } }
+
+/* more */
+.rows { border-top: 1px solid var(--ink); }
+.row { display: grid; grid-template-columns: 64px minmax(0, 1.2fr) minmax(0, 1.4fr) auto; gap: 16px; align-items: baseline; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none; transition: opacity var(--h); }
+.rows:hover .row { opacity: 0.4; } .rows .row:hover { opacity: 1; }
+.row b { font-weight: 500; font-size: 1.15rem; letter-spacing: -0.015em; }
+.row p { margin: 0; color: var(--ink-2); }
+@media (max-width: 860px) { .row { grid-template-columns: 48px minmax(0, 1fr); } .row p, .row .chips { grid-column: 2; } }
+</style>
+<script>try { const t = localStorage.getItem('br-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+<script src="assets/site.js"></script>
+<script>BR.nav('engineering')</script>
+
+<main>
+  <section class="wrap page-head">
+    <div class="grid">
+      <div class="hang"><span class="label">01 · Engineering</span></div>
+      <div class="main">
+        <div class="meta-row"><span class="label">6 live channels</span><span class="label">Full-stack · DevOps · Embedded · AI</span></div>
+        <h1 class="display">Things I build, running live<span class="dot">.</span></h1>
+        <p class="lede">Each channel is a working piece of a real project, rebuilt to run in your browser. My own projects come first, then team builds. Touch them, then read how they work.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="grid"><div class="main"><nav class="ch-index" aria-label="Channels">
+    <a href="#pixi"><span class="label">CH 01 · Solo</span><b>Pixi and RoboEyes</b></a>
+    <a href="#adaptifocus"><span class="label">CH 02 · Solo</span><b>AdaptiFocus</b></a>
+    <a href="#smartexpense"><span class="label">CH 03 · Solo</span><b>SmartExpense</b></a>
+    <a href="#stego"><span class="label">CH 04 · Team</span><b>Steganography</b></a>
+    <a href="#risc"><span class="label">CH 05 · Team</span><b>8-bit RISC CPU</b></a>
+    <a href="#sdn"><span class="label">CH 06 · Team</span><b>SDN classifier</b></a>
+  </nav></div></div></div>
+
+  <!-- CH 01 Pixi / RoboEyes -->
+  <section class="wrap section channel" id="pixi">
+    <div class="grid">
+      <div class="hang ch-meta">
+        <span class="label">CH 01 · Embedded</span>
+        <span class="label solo">● Solo project</span>
+        <div class="chips"><span class="chip">Python</span><span class="chip">TensorFlow Lite</span><span class="chip">NumPy</span><span class="chip">SPI</span><span class="chip">Raspberry Pi</span></div>
+        <a href="https://github.com/PrageethBanuka/RoboEyes-RaspberryPi" target="_blank" rel="noopener">RoboEyes source ↗</a>
+        <a href="https://github.com/PrageethBanuka/pixi_eye_animation" target="_blank" rel="noopener">Pixi source ↗</a>
+      </div>
+      <div class="main">
+        <div>
+          <div class="device"><canvas id="eyes" width="640" height="400" aria-label="Animated robot eyes that follow your pointer"></canvas>
+            <div class="hud"><span class="label">SPI TFT · 320×240</span><span class="label" id="eyeFps">-- fps</span></div></div>
+          <div class="controls"><div class="seg" id="moods" role="group" aria-label="Mood">
+            <button type="button" aria-pressed="true" data-m="default">Default</button><button type="button" aria-pressed="false" data-m="happy">Happy</button><button type="button" aria-pressed="false" data-m="tired">Tired</button><button type="button" aria-pressed="false" data-m="angry">Angry</button>
+          </div></div>
+        </div>
+        <div class="ch-copy">
+          <h2 class="h2">Pixi, and the RoboEyes that give it a face</h2>
+          <p class="lede" style="font-size:1.15rem">An autonomous robot with on-device vision and a face that runs at 60 fps.</p>
+          <dl>
+            <div><dt>What</dt><dd>Pixi is an autonomous robot on a Raspberry Pi. TensorFlow Lite runs its vision on the device, with no cloud round trip. For its face I ported the RoboEyes animation library to Python.</dd></div>
+            <div><dt>How</dt><dd>A custom NumPy drawing engine renders each frame as an array and pushes it over SPI, skipping slow per-pixel drawing calls.</dd></div>
+            <div><dt>Try</dt><dd>Move your pointer. The eyes follow, the near eye grows when they look sideways, and they blink on their own.</dd></div>
+          </dl>
+          <div class="stat"><span><b>60</b> fps on embedded hardware</span><span>Edge AI · TFLite vision</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 02 AdaptiFocus -->
+  <section class="wrap section channel" id="adaptifocus">
+    <div class="grid">
+      <div class="hang ch-meta">
+        <span class="label">CH 02 · AI</span>
+        <span class="label solo">● Solo project</span>
+        <div class="chips"><span class="chip">Python</span><span class="chip">Multi-agent</span><span class="chip">Docker</span><span class="chip">Redis</span><span class="chip">Sentry</span></div>
+        <a href="https://github.com/PrageethBanuka/adaptifocus" target="_blank" rel="noopener">Source ↗</a>
+      </div>
+      <div class="main">
+        <div>
+          <div class="af">
+            <canvas id="afCv" width="560" height="320" aria-label="Live focus signal for this page"></canvas>
+            <div class="agents" id="afLog" aria-live="polite"></div>
+          </div>
+          <p class="note">Toy version. It reads only your pointer, scroll and tab activity on this page. Nothing is stored or sent.</p>
+        </div>
+        <div class="ch-copy">
+          <h2 class="h2">AdaptiFocus</h2>
+          <p class="lede" style="font-size:1.15rem">A multi-agent AI that notices when a student's attention drifts, and adapts.</p>
+          <dl>
+            <div><dt>What</dt><dd>An attention management platform for students. Agents watch behaviour signals, decide whether focus is slipping, and step in with the right nudge.</dd></div>
+            <div><dt>How</dt><dd>Separate agents observe, analyse and coach. Real-time inference runs in Docker with Redis for fast state and Sentry watching for errors in production.</dd></div>
+            <div><dt>Try</dt><dd>Read calmly and the signal rises. Scroll fast, go idle or switch tabs and watch the agents react.</dd></div>
+          </dl>
+          <div class="stat"><span>Accuracy <b>94.3%</b></span><span>Latency <b>−80%</b></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 03 SmartExpense -->
+  <section class="wrap section channel" id="smartexpense">
+    <div class="grid">
+      <div class="hang ch-meta">
+        <span class="label">CH 03 · DevOps</span>
+        <span class="label solo">● Solo project</span>
+        <div class="chips"><span class="chip">AWS EC2</span><span class="chip">Terraform</span><span class="chip">Ansible</span><span class="chip">Jenkins</span><span class="chip">JavaScript</span></div>
+        <a href="https://github.com/PrageethBanuka/smartexpense" target="_blank" rel="noopener">Source ↗</a>
+      </div>
+      <div class="main">
+        <div>
+          <div class="pipe">
+            <div class="stages" id="stages"></div>
+            <div class="term" id="term" aria-live="polite"><div>$ waiting for a commit…</div></div>
+          </div>
+          <div class="controls">
+            <button class="btn" type="button" id="pushBtn">Push a commit</button>
+            <label class="toggle"><input type="checkbox" id="vuln"> Include a vulnerable dependency</label>
+          </div>
+        </div>
+        <div class="ch-copy">
+          <h2 class="h2">SmartExpense</h2>
+          <p class="lede" style="font-size:1.15rem">An expense tracker, shipped through a full CI/CD pipeline on AWS.</p>
+          <dl>
+            <div><dt>What</dt><dd>A personal finance app whose real point is how it ships: every commit is built, tested, scanned and deployed without a manual step.</dd></div>
+            <div><dt>How</dt><dd>Jenkins runs the pipeline. Terraform creates the AWS EC2 infrastructure as code, Ansible configures it, and a security scan can stop a release before it deploys.</dd></div>
+            <div><dt>Try</dt><dd>Push a commit and follow it to production. Tick the box and push again to watch the scan block the deploy.</dd></div>
+          </dl>
+          <div class="stat"><span>Infrastructure as code</span><span>Security gate before deploy</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap group-head" aria-labelledby="team-h">
+    <div class="grid">
+      <div class="hang"><span class="label">Team builds</span></div>
+      <div class="main">
+        <h2 class="h2" id="team-h">Built with classmates</h2>
+        <p class="lede" style="margin-top:12px">Group projects from the Computer Engineering programme at the University of Ruhuna.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 02 Stego -->
+  <section class="wrap section channel" id="stego">
+    <div class="grid">
+      <div class="hang ch-meta">
+        <span class="label">CH 04 · Security</span>
+        <span class="label">Team project</span>
+        <div class="chips"><span class="chip">Python</span><span class="chip">SHA-256</span><span class="chip">TEA cipher</span></div>
+        <a href="https://github.com/PrageethBanuka/Dual-Layer-Steganography" target="_blank" rel="noopener">Source ↗</a>
+      </div>
+      <div class="main">
+        <div>
+          <div class="device"><canvas id="stegoCv" width="720" height="480" aria-label="Cover image carrying a hidden message. Move the lens to view its lowest bit plane."></canvas>
+            <div class="hud"><span class="label">Lens · bit plane 0 · red</span><span class="label" id="stegoMode">sequential</span></div></div>
+          <div class="controls">
+            <label for="stegoMsg" class="label" style="width:100%">Your secret message</label>
+            <input id="stegoMsg" maxlength="40" value="COFFEE RUNS THROUGH MY CIRCUITS" autocomplete="off" style="flex:1;min-width:0;font:inherit;font-family:var(--f-mono);font-size:.85rem;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink)">
+            <div class="seg" id="stegoSeg" role="group" aria-label="Bit order"><button type="button" aria-pressed="true" data-m="seq">Sequential</button><button type="button" aria-pressed="false" data-m="scatter">Scattered</button></div>
+          </div>
+          <p class="note" id="stegoNote">Move or drag the lens over the image. <label style="text-decoration:underline;cursor:pointer">Use your own image<input type="file" id="stegoFile" accept="image/*" hidden></label>. It never leaves your browser.</p>
+        </div>
+        <div class="ch-copy">
+          <h2 class="h2">Dual-Layer Steganography</h2>
+          <p class="lede" style="font-size:1.15rem">A message hidden inside an image, invisible to the eye.</p>
+          <dl>
+            <div><dt>What</dt><dd>Hides data in the least significant bits of an image, then hardens it against automated steganalysis.</dd></div>
+            <div><dt>How</dt><dd>Layer one encrypts the payload with the TEA block cipher. Layer two scatters the bits to pixel positions derived from SHA-256, so the changes look like sensor noise.</dd></div>
+            <div><dt>Try</dt><dd>Type a message. It is written into the lowest bit of every pixel, which the eye cannot see. The lens shows that bit plane. Switch to Scattered: the same bits, placed in an order derived from a SHA-256 hash, now look like ordinary sensor noise.</dd></div>
+          </dl>
+          <div class="stat"><span>Pixels changed <b id="stegoCap">--</b></span><span>Each by at most 1/255</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 03 RISC -->
+  <section class="wrap section channel" id="risc">
+    <div class="grid">
+      <div class="hang ch-meta">
+        <span class="label">CH 05 · Architecture</span>
+        <span class="label">Team project</span>
+        <div class="chips"><span class="chip">ISA design</span><span class="chip">Datapath</span><span class="chip">Control</span></div>
+        <a href="https://github.com/PrageethBanuka/8-bit-RISC-Processor" target="_blank" rel="noopener">Source ↗</a>
+      </div>
+      <div class="main">
+        <div>
+          <div class="cpu" id="cpu">
+            <div class="asm" id="asm"></div>
+            <div class="regs" id="regs"></div>
+            <div class="tape" id="tape">OUT ›</div>
+          </div>
+          <div class="controls">
+            <button class="btn" type="button" id="cpuStep">Step</button>
+            <button class="btn ghost" type="button" id="cpuRun">Run</button>
+            <button class="btn ghost" type="button" id="cpuReset">Reset</button>
+            <span class="label" id="cpuCycles">Cycle 0</span>
+          </div>
+          <p class="note">Illustrative instruction set for this demo. <span class="confirm">swap for the real ISA</span></p>
+        </div>
+        <div class="ch-copy">
+          <h2 class="h2">8-bit RISC Processor</h2>
+          <p class="lede" style="font-size:1.15rem">A processor designed from the instruction set up.</p>
+          <dl>
+            <div><dt>What</dt><dd>Instruction set, datapath and control unit for a compact 8-bit RISC CPU.</dd></div>
+            <div><dt>Try</dt><dd>Step through a Fibonacci program one instruction at a time. Watch the registers as bits. At 233 + 144 the 8-bit register overflows and the carry flag lights.</dd></div>
+          </dl>
+          <div class="stat"><span>Registers <b>4 × 8-bit</b></span><span>Flags Z · C</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 04 SDN -->
+  <section class="wrap section channel" id="sdn">
+    <div class="grid">
+      <div class="hang ch-meta">
+        <span class="label">CH 06 · Networks</span>
+        <span class="label">Team project</span>
+        <div class="chips"><span class="chip">SDN</span><span class="chip">Python</span><span class="chip">Machine learning</span></div>
+        <a href="https://github.com/PrageethBanuka/flowmanager_sdn" target="_blank" rel="noopener">Source ↗</a>
+      </div>
+      <div class="main">
+        <div>
+          <div class="device"><canvas id="sdnCv" width="640" height="400" aria-label="Simulated network flows being classified into four lanes"></canvas>
+            <div class="hud"><span class="label">Controller · flow classifier</span><span class="label" id="sdnAcc">accuracy --</span></div></div>
+          <p class="note">Simulated stream. Misclassified flows show in red. The error rate here is illustrative.</p>
+        </div>
+        <div class="ch-copy">
+          <h2 class="h2">SDN testbed and traffic classifier</h2>
+          <p class="lede" style="font-size:1.15rem">A software-defined network that knows what its traffic is.</p>
+          <dl>
+            <div><dt>What</dt><dd>An SDN testbed with a flow manager, plus a machine learning model that labels each flow by type.</dd></div>
+            <div><dt>Why</dt><dd>Once the controller knows a flow is a call or a video, it can give it the right path and priority.</dd></div>
+          </dl>
+          <div class="stat"><span>Classes <b>4</b></span><span>Web · Video · VoIP · Gaming</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- XTREME -->
+  <section class="wrap section" id="xtreme">
+    <div class="grid">
+      <div class="hang"><span class="label">Competition</span><br><span class="label">IEEEXtreme 18.0 · 2024</span></div>
+      <div class="main">
+        <div class="xt-head">
+          <div class="xt-num">#418<span class="of"> of 17,000+</span></div>
+          <p class="lede" style="max-width:30ch">24 hours of competitive programming, worldwide. #22 in Sri Lanka. Every dot below is a team. One is ours.</p>
+        </div>
+        <div class="xt-wrap" id="xtWrap"><canvas id="xt" aria-label="17,000 dots, one per team, with rank 418 highlighted"></canvas><div class="xt-tip" id="xtTip"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MORE -->
+  <section class="wrap section">
+    <div class="grid">
+      <div class="hang"><span class="label">Also built</span></div>
+      <div class="main rows">
+        <a class="row" href="https://github.com/PrageethBanuka/Modstack_Component_Library" target="_blank" rel="noopener"><span class="label">UI</span><b>Modstack</b><p>A reusable component library with a live showcase.</p><div class="chips"><span class="chip">JavaScript</span></div></a>
+        <a class="row" href="https://github.com/PrageethBanuka/secure_remote_access_tool" target="_blank" rel="noopener"><span class="label">Sec</span><b>Secure remote access tool</b><p>Remote access with security designed in from the start.</p><div class="chips"><span class="chip">Java</span></div></a>
+        <a class="row" href="https://personal-productivity-hub.vercel.app" target="_blank" rel="noopener"><span class="label">Web</span><b>Personal Productivity Hub</b><p>Tasks, notes and focus tools in one place. Live on Vercel.</p><div class="chips"><span class="chip">Web app</span></div></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>BR.footer()</script>
+
+<script>
+(() => {
+const { Spring, clamp, reduce, blip } = BR;
+const onScreen = (el, cb) => { let vis = false; new IntersectionObserver(es => { vis = es[0].isIntersecting; cb(vis); }).observe(el); return () => vis; };
+
+/* ---------- CH 01 RoboEyes ---------- */
+{
+  const cv = document.getElementById('eyes'), c = cv.getContext('2d'), W = cv.width, H = cv.height;
+  const lx = new Spring(0, { damping: 0.85, response: 0.32 }), ly = new Spring(0, { damping: 0.85, response: 0.32 });
+  const open = new Spring(1, { damping: 1, response: 0.09 }), lid = new Spring(0, { damping: 1, response: 0.25 });
+  let mood = 'default';
+  const rr = (x, y, w, h, r) => { r = Math.min(r, w / 2, h / 2); c.beginPath(); c.roundRect ? c.roundRect(x, y, w, h, r) : c.rect(x, y, w, h); c.fill(); };
+  function frame() {
+    c.fillStyle = '#05070A'; c.fillRect(0, 0, W, H);
+    const ew = W * 0.2, eh = H * 0.42, gap = W * 0.075, ox = lx.x * W * 0.13, oy = ly.x * H * 0.15;
+    const o = clamp(open.x, 0.04, 1);
+    [-1, 1].forEach(side => {
+      const grow = 1 + 0.16 * Math.max(0, side * lx.x);       // curiosity: the eye on the look side grows
+      const h = eh * grow * o, w = ew * (1 + 0.06 * Math.max(0, side * lx.x));
+      const cx0 = W / 2 + side * (gap / 2 + ew / 2) + ox, cy0 = H / 2 + oy;
+      const x = cx0 - w / 2, y = cy0 - h / 2;
+      c.fillStyle = '#E8EAE6'; rr(x, y, w, h, 26);
+      c.fillStyle = '#05070A'; const L = lid.x;
+      if (L > 0.01) {
+        if (mood === 'happy') { rr(x - 4, y + h * (1 - 0.42 * L), w + 8, h, 26); }
+        if (mood === 'tired' || mood === 'angry') {
+          const outer = (mood === 'tired') ? side === -1 : side === 1; // which top corner drops
+          c.beginPath();
+          if (outer) { c.moveTo(x - 2, y - 2); c.lineTo(x + w + 2, y - 2); c.lineTo(x - 2, y + h * 0.55 * L); }
+          else { c.moveTo(x - 2, y - 2); c.lineTo(x + w + 2, y - 2); c.lineTo(x + w + 2, y + h * 0.55 * L); }
+          c.closePath(); c.fill();
+        }
+      }
+    });
+  }
+  let raf = 0, vis = false, fpsN = 0, fpsT = performance.now(); const fpsEl = document.getElementById('eyeFps');
+  function loop(now) { frame(); fpsN++; if (now - fpsT > 500) { fpsEl.textContent = `${Math.round(fpsN * 1000 / (now - fpsT))} fps`; fpsN = 0; fpsT = now; } raf = vis ? requestAnimationFrame(loop) : 0; }
+  onScreen(cv, v => { vis = v; if (v && !raf) raf = requestAnimationFrame(loop); });
+  frame();
+  addEventListener('pointermove', e => {
+    const r = cv.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+    lx.to(clamp((e.clientX - (r.left + r.width / 2)) / (r.width * 0.7), -1, 1));
+    ly.to(clamp((e.clientY - (r.top + r.height / 2)) / (r.height * 0.9), -1, 1));
+  }, { passive: true });
+  (function blink() {
+    setTimeout(() => { if (!reduce()) open.to(0, { then: () => open.to(1) }); blink(); }, 2200 + Math.random() * 3200);
+  })();
+  if (!reduce()) setInterval(() => { if (Math.random() < 0.3 && !matchMedia('(pointer:fine)').matches) { lx.to(Math.random() * 2 - 1); ly.to(Math.random() - 0.5); } }, 1800);
+  document.getElementById('moods').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    [...b.parentNode.children].forEach(x => x.setAttribute('aria-pressed', x === b)); blip('tick');
+    const next = b.dataset.m;
+    lid.to(0, { then: () => { mood = next; if (next !== 'default') lid.to(1); if (reduce()) frame(); } });
+    if (reduce()) frame();
+  });
+  [lx, ly, open, lid].forEach(s => s.on(() => { if (!vis || reduce()) frame(); }));
+}
+
+/* ---------- CH 02 AdaptiFocus: toy focus signal + three agents ---------- */
+{
+  const cv = document.getElementById('afCv'), c = cv.getContext('2d'), log = document.getElementById('afLog');
+  const W = cv.width, H = cv.height, N = 120; // 60 s at 2 samples/s
+  const hist = Array(N).fill(0.72); let score = 0.72, lastMove = performance.now(), scrollV = 0, lastY = scrollY, lastT = performance.now(), state = 'focus', away = false, lastObs = 0;
+  function say(agent, msg, warn) {
+    const p = document.createElement('p'); if (warn) p.className = 'warn';
+    p.innerHTML = `<b>${agent}</b> ${msg}`; log.appendChild(p);
+    while (log.children.length > 9) log.firstChild.remove();
+  }
+  say('Observer', 'Watching pointer, scroll and tab signals on this page.');
+  addEventListener('pointermove', () => { lastMove = performance.now(); }, { passive: true });
+  addEventListener('scroll', () => { const now = performance.now(), dt = (now - lastT) / 1000; if (dt > 0) scrollV = Math.max(scrollV, Math.abs(scrollY - lastY) / dt); lastY = scrollY; lastT = now; }, { passive: true });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { away = true; } else if (away) { away = false; say('Observer', 'Tab switch detected. You were away.', true); score = Math.min(score, 0.3); } });
+  function sample() {
+    const now = performance.now(), idle = (now - lastMove) / 1000;
+    let engaged = 0.85, reason = '';
+    if (scrollV > 2500) { engaged = 0.15; reason = 'fast scrolling, skimming not reading'; }
+    else if (idle > 10) { engaged = 0.25; reason = `no activity for ${Math.round(idle)} s`; }
+    else if (scrollV > 900) { engaged = 0.5; }
+    scrollV *= 0.3;
+    score += (engaged - score) * 0.18;
+    hist.push(score); hist.shift();
+    if (state === 'focus' && score < 0.45) { state = 'drift'; say('Analyst', `Attention dropping: ${reason || 'signal is falling'}.`, true); setTimeout(() => say('Coach', score < 0.35 ? 'Suggest a 5-minute break, then a shorter task.' : 'Try one section at a time. I will hold the rest.'), 600); }
+    else if (state === 'drift' && score > 0.7) { state = 'focus'; say('Coach', 'Back in focus. Resuming the session.'); }
+    if (now - lastObs > 9000) { lastObs = now; say('Observer', `focus ${Math.round(score * 100)}% · idle ${Math.round(idle)} s`); }
+    draw();
+  }
+  function draw() {
+    c.fillStyle = '#05070A'; c.fillRect(0, 0, W, H);
+    const top = 40, bot = H - 30, yv = v => bot - v * (bot - top);
+    c.strokeStyle = 'rgba(232,234,230,.07)'; c.lineWidth = 1; c.beginPath();
+    for (let k = 0; k <= 4; k++) { const y = Math.round(top + (bot - top) * k / 4) + 0.5; c.moveTo(0, y); c.lineTo(W, y); } c.stroke();
+    c.strokeStyle = 'rgba(255,74,61,.7)'; c.setLineDash([4, 5]); c.beginPath(); c.moveTo(0, yv(0.45)); c.lineTo(W, yv(0.45)); c.stroke(); c.setLineDash([]);
+    const g = c.createLinearGradient(0, top, 0, bot); g.addColorStop(0, 'rgba(60,194,180,.28)'); g.addColorStop(1, 'rgba(60,194,180,0)');
+    c.beginPath(); hist.forEach((v, i) => { const x = i / (N - 1) * W; i ? c.lineTo(x, yv(v)) : c.moveTo(x, yv(v)); });
+    c.lineTo(W, bot); c.lineTo(0, bot); c.closePath(); c.fillStyle = g; c.fill();
+    c.beginPath(); hist.forEach((v, i) => { const x = i / (N - 1) * W; i ? c.lineTo(x, yv(v)) : c.moveTo(x, yv(v)); });
+    c.strokeStyle = '#3CC2B4'; c.lineWidth = 2; c.stroke();
+    c.fillStyle = '#3CC2B4'; c.beginPath(); c.arc(W - 3, yv(score), 4, 0, 6.283); c.fill();
+    c.font = '500 13px "Geist Mono", monospace'; c.fillStyle = 'rgba(232,234,230,.55)'; c.textAlign = 'left';
+    c.fillText('FOCUS SIGNAL · LAST 60 S', 14, 24); c.fillStyle = 'rgba(255,74,61,.8)'; c.fillText('THRESHOLD', 14, yv(0.45) - 8);
+    c.textAlign = 'right'; c.fillStyle = state === 'focus' ? '#3CC2B4' : '#FF4A3D'; c.fillText(`${Math.round(score * 100)}% · ${state === 'focus' ? 'FOCUSED' : 'DRIFTING'}`, W - 14, 24);
+  }
+  draw(); setInterval(sample, 500);
+}
+
+/* ---------- CH 03 SmartExpense: CI/CD pipeline ---------- */
+{
+  const ST = ['Commit', 'Build', 'Test', 'Security scan', 'Terraform', 'Ansible', 'Live on EC2'];
+  const LOGS = [
+    ['git push origin main', 'webhook → Jenkins: job smartexpense #'],
+    ['npm ci', 'npm run build', 'docker build -t smartexpense:sha-'],
+    ['npm test', '42 passed, 0 failed'],
+    ['scanning dependencies and image…', 'no known vulnerabilities'],
+    ['terraform plan', 'terraform apply: EC2 instance and security group up to date'],
+    ['ansible-playbook deploy.yml', 'container restarted, health check 200 OK'],
+    ['https://smartexpense… is serving the new build'],
+  ];
+  const stages = document.getElementById('stages'), term = document.getElementById('term'), btn = document.getElementById('pushBtn'), vuln = document.getElementById('vuln');
+  stages.innerHTML = ST.map(s => `<div class="stage"><span>${s.toUpperCase()}</span><i></i></div>`).join('');
+  const els = [...stages.children]; let running = false, build = 41;
+  const line = (t, cls) => { const d = document.createElement('div'); if (cls) d.className = cls; d.textContent = t; term.appendChild(d); while (term.children.length > 11) term.firstChild.remove(); };
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  btn.addEventListener('click', async () => {
+    if (running) return; running = true; btn.disabled = true; build++;
+    const sha = Math.random().toString(16).slice(2, 9), bad = vuln.checked;
+    els.forEach(e => { e.className = 'stage'; e.style.setProperty('--p', 0); });
+    term.innerHTML = ''; line(`$ commit ${sha} · "update budget view"`);
+    for (let i = 0; i < ST.length; i++) {
+      const el = els[i]; el.classList.add('run'); BR.blip('tick');
+      const msgs = LOGS[i].map(m => m.endsWith('#') ? m + build : m.endsWith('sha-') ? m + sha : m);
+      const steps = 8; for (let k = 1; k <= steps; k++) { el.style.setProperty('--p', k / steps); await wait(BR.reduce() ? 20 : 70); }
+      if (i === 3 && bad) {
+        line('$ ' + msgs[0]); line('CRITICAL  lodash@4.17.15  prototype pollution (CVE-2020-8203)', 'e'); line('Security gate failed. Deploy blocked. Production untouched.', 'e');
+        el.className = 'stage fail'; BR.blip('tone'); break;
+      }
+      msgs.forEach((m, k) => line((k === 0 && i < 6 ? '$ ' : '  ') + m, i === 6 ? 'g' : ''));
+      el.className = 'stage ok';
+    }
+    if (!(bad)) BR.blip('tone');
+    running = false; btn.disabled = false;
+  });
+}
+
+/* ---------- CH 04 Steganography: real LSB embedding, sequential vs SHA-256 scattered ---------- */
+{
+  const cv = document.getElementById('stegoCv'), c = cv.getContext('2d', { willReadFrequently: true }), W = cv.width, H = cv.height;
+  const msgIn = document.getElementById('stegoMsg'), modeEl = document.getElementById('stegoMode'), capEl = document.getElementById('stegoCap');
+  let cover = null, base = null, lsb = null, mode = 'seq', perm = null;
+  const lxS = new Spring(0.5, { damping: 1, response: 0.25 }), lyS = new Spring(0.5, { damping: 1, response: 0.25 });
+  function makeCover() { // photo-like cover: soft light, horizon, film grain
+    const d = c.createImageData(W, H), p = d.data;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const u = x / W, v = y / H, i = (y * W + x) * 4;
+      const sun = Math.exp(-(((u - 0.68) ** 2) / 0.02 + ((v - 0.42) ** 2) / 0.012));
+      const hill = v > 0.62 + 0.06 * Math.sin(u * 7) + 0.03 * Math.sin(u * 19) ? 1 : 0;
+      let r = 30 + 150 * v + 160 * sun, g = 44 + 90 * v + 120 * sun, b = 90 + 60 * (1 - v) + 40 * sun;
+      if (hill) { r = 22 + 30 * v; g = 30 + 26 * v; b = 34 + 18 * v; }
+      const n = (Math.random() - 0.5) * 14;
+      p[i] = Math.max(0, Math.min(255, r + n)); p[i + 1] = Math.max(0, Math.min(255, g + n)); p[i + 2] = Math.max(0, Math.min(255, b + n)); p[i + 3] = 255;
+    }
+    return d;
+  }
+  async function seedFromSha(text) {
+    try { const h = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text))); return (h[0] << 24 | h[1] << 16 | h[2] << 8 | h[3]) >>> 0 || 1; }
+    catch (e) { let s = 2166136261; for (const ch of text) s = Math.imul(s ^ ch.charCodeAt(0), 16777619); return s >>> 0 || 1; }
+  }
+  async function makePerm() {
+    let s = await seedFromSha('dual-layer-steganography-key');
+    const n = W * H, P = new Uint32Array(n); for (let i = 0; i < n; i++) P[i] = i;
+    for (let i = n - 1; i > 0; i--) { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; const j = s % (i + 1); const t = P[i]; P[i] = P[j]; P[j] = t; }
+    return P;
+  }
+  function maskFor(text) {
+    const m = document.createElement('canvas'); m.width = W; m.height = H; const mc = m.getContext('2d');
+    mc.fillStyle = '#000'; mc.fillRect(0, 0, W, H); mc.fillStyle = '#fff'; mc.textAlign = 'center'; mc.textBaseline = 'middle';
+    const words = (text.trim() || ' ').toUpperCase().split(/\s+/), lines = []; let line = '';
+    let fs = 96; mc.font = `700 ${fs}px "Instrument Sans", system-ui, sans-serif`;
+    for (const w of words) { const t = line ? line + ' ' + w : w; if (mc.measureText(t).width > W * 0.86 && line) { lines.push(line); line = w; } else line = t; }
+    lines.push(line);
+    while (fs > 28 && (lines.length * fs * 1.05 > H * 0.86 || Math.max(...lines.map(l => mc.measureText(l).width)) > W * 0.9)) { fs -= 4; mc.font = `700 ${fs}px "Instrument Sans", system-ui, sans-serif`; }
+    lines.forEach((l, k) => mc.fillText(l, W / 2, H / 2 + (k - (lines.length - 1) / 2) * fs * 1.05));
+    return mc.getImageData(0, 0, W, H).data;
+  }
+  function embed() {
+    if (!cover) return;
+    const md = maskFor(msgIn.value), d = new ImageData(new Uint8ClampedArray(cover.data), W, H), p = d.data;
+    const L = new ImageData(W, H), lp = L.data; let changed = 0;
+    for (let k = 0; k < W * H; k++) {
+      const bit = md[k * 4] > 127 ? 1 : 0, px = (mode === 'scatter' && perm ? perm[k] : k) * 4;
+      const nv = (p[px] & 254) | bit; if (nv !== p[px]) changed++; p[px] = nv;
+    }
+    for (let i = 0; i < p.length; i += 4) { const on = p[i] & 1; lp[i] = on ? 255 : 14; lp[i + 1] = on ? 74 : 10; lp[i + 2] = on ? 61 : 10; lp[i + 3] = 255; }
+    base = base || document.createElement('canvas'); base.width = W; base.height = H; base.getContext('2d').putImageData(d, 0, 0);
+    lsb = lsb || document.createElement('canvas'); lsb.width = W; lsb.height = H; lsb.getContext('2d').putImageData(L, 0, 0);
+    capEl.textContent = `${changed.toLocaleString()} of ${(W * H).toLocaleString()}`;
+    modeEl.textContent = mode === 'scatter' ? 'scattered · SHA-256 order' : 'sequential';
+    draw();
+  }
+  function draw() {
+    if (!base) return; const R = W * 0.17, x = lxS.x * W, y = lyS.x * H;
+    c.drawImage(base, 0, 0);
+    c.save(); c.beginPath(); c.arc(x, y, R, 0, 6.283); c.clip(); c.drawImage(lsb, 0, 0); c.restore();
+    c.lineWidth = 3; c.strokeStyle = '#FF4A3D'; c.beginPath(); c.arc(x, y, R, 0, 6.283); c.stroke();
+    c.lineWidth = 1; c.strokeStyle = 'rgba(255,255,255,.6)'; c.beginPath(); c.arc(x, y, R + 5, 0, 6.283); c.stroke();
+  }
+  function useImage(img) {
+    const s = Math.max(W / img.width, H / img.height), w = img.width * s, h = img.height * s;
+    c.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+    try { cover = c.getImageData(0, 0, W, H); } catch (e) { document.getElementById('stegoNote').textContent = 'That image could not be read. Try another one.'; return; }
+    embed();
+  }
+  cover = makeCover(); embed();
+  makePerm().then(P => { perm = P; if (mode === 'scatter') embed(); });
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(embed);
+  let t = 0; msgIn.addEventListener('input', () => { clearTimeout(t); t = setTimeout(embed, 120); });
+  document.getElementById('stegoSeg').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    [...b.parentNode.children].forEach(x => x.setAttribute('aria-pressed', x === b)); mode = b.dataset.m; blip('tick'); embed();
+  });
+  document.getElementById('stegoFile').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const img = new Image(); img.onload = () => { useImage(img); URL.revokeObjectURL(img.src); }; img.src = URL.createObjectURL(f);
+  });
+  [lxS, lyS].forEach(s => s.on(draw));
+  cv.style.touchAction = 'none';
+  const move = e => { const r = cv.getBoundingClientRect(); lxS.to(clamp((e.clientX - r.left) / r.width, 0, 1)); lyS.to(clamp((e.clientY - r.top) / r.height, 0, 1)); };
+  cv.addEventListener('pointermove', move); cv.addEventListener('pointerdown', e => { cv.setPointerCapture(e.pointerId); move(e); });
+}
+
+/* ---------- CH 03 8-bit RISC ---------- */
+{
+  const PROG = [
+    ['LDI', 0, 0], ['LDI', 1, 1], ['LDI', 3, 13], ['ADD', 2, 0, 1], ['MOV', 0, 1], ['MOV', 1, 2], ['OUT', 2], ['DEC', 3], ['BNZ', 3], ['HLT'],
+  ];
+  const fmt = ins => {
+    const [op, a, b, c] = ins;
+    if (op === 'LDI') return `LDI  R${a}, #${b}`; if (op === 'ADD') return `ADD  R${a}, R${b}, R${c}`;
+    if (op === 'MOV') return `MOV  R${a}, R${b}`; if (op === 'OUT') return `OUT  R${a}`; if (op === 'DEC') return `DEC  R${a}`;
+    if (op === 'BNZ') return `BNZ  0x${a.toString(16).padStart(2, '0')}`; return 'HLT';
+  };
+  const asm = document.getElementById('asm'), regs = document.getElementById('regs'), tape = document.getElementById('tape'), cyc = document.getElementById('cpuCycles');
+  asm.innerHTML = PROG.map((p, i) => `<div><span>${i.toString(16).padStart(2, '0')}</span><span>${fmt(p)}</span></div>`).join('');
+  regs.innerHTML = [0, 1, 2, 3].map(i => `<div class="reg"><span>R${i}</span><span class="bits">${'<i></i>'.repeat(8)}</span><span class="v">0</span></div>`).join('') + '<div class="flags"><span id="fZ">Z</span><span id="fC">C</span><span id="fH"></span></div>';
+  let S;
+  function reset() { S = { pc: 0, r: [0, 0, 0, 0], z: 0, c: 0, out: [], halt: false, n: 0 }; render(); }
+  function step() {
+    if (S.halt) return; const [op, a, b, c] = PROG[S.pc]; S.n++;
+    let next = S.pc + 1;
+    if (op === 'LDI') S.r[a] = b & 255;
+    else if (op === 'ADD') { const s = S.r[b] + S.r[c]; S.c = s > 255 ? 1 : 0; S.r[a] = s & 255; S.z = S.r[a] === 0 ? 1 : 0; }
+    else if (op === 'MOV') S.r[a] = S.r[b];
+    else if (op === 'OUT') S.out.push(S.r[a] + (S.c ? '*' : ''));
+    else if (op === 'DEC') { S.r[a] = (S.r[a] - 1) & 255; S.z = S.r[a] === 0 ? 1 : 0; }
+    else if (op === 'BNZ') { if (!S.z) next = a; }
+    else if (op === 'HLT') { S.halt = true; next = S.pc; }
+    S.pc = next; render(); blip('tick');
+  }
+  function render() {
+    [...asm.children].forEach((d, i) => d.classList.toggle('pc', i === S.pc));
+    [...regs.querySelectorAll('.reg')].forEach((el, i) => {
+      const v = S.r[i]; el.querySelectorAll('.bits i').forEach((b, k) => b.classList.toggle('on', (v >> (7 - k)) & 1));
+      el.querySelector('.v').textContent = `${v.toString().padStart(3, ' ')} · 0x${v.toString(16).padStart(2, '0').toUpperCase()}`;
+    });
+    document.getElementById('fZ').className = S.z ? 'on' : ''; document.getElementById('fC').className = S.c ? 'on' : '';
+    document.getElementById('fH').textContent = S.halt ? 'HALT' : '';
+    tape.textContent = 'OUT › ' + S.out.join('  ') + (S.out.some(o => String(o).includes('*')) ? '   (* carry: wrapped past 255)' : '');
+    cyc.textContent = `Cycle ${S.n}`;
+  }
+  let timer = null; const runBtn = document.getElementById('cpuRun');
+  function stopRun() { clearInterval(timer); timer = null; runBtn.textContent = 'Run'; }
+  document.getElementById('cpuStep').addEventListener('click', () => { stopRun(); step(); });
+  document.getElementById('cpuReset').addEventListener('click', () => { stopRun(); reset(); });
+  runBtn.addEventListener('click', () => {
+    if (timer) return stopRun(); if (S.halt) reset();
+    runBtn.textContent = 'Pause'; timer = setInterval(() => { step(); if (S.halt) stopRun(); }, 156); // quarter beat at 96 BPM
+  });
+  reset();
+}
+
+/* ---------- CH 04 SDN classifier (simulated) ---------- */
+{
+  const cv = document.getElementById('sdnCv'), c = cv.getContext('2d'), W = cv.width, H = cv.height;
+  const LANES = ['Web', 'Video', 'VoIP', 'Gaming'], gate = W * 0.42, laneY = i => H * (0.26 + i * 0.18);
+  let P = [], total = 0, right = 0, last = 0, acc = document.getElementById('sdnAcc');
+  function spawn() {
+    const cls = Math.floor(Math.random() * 4), wrong = Math.random() < 0.06;
+    const out = wrong ? (cls + 1 + Math.floor(Math.random() * 3)) % 4 : cls;
+    P.push({ x: -8, y: H * 0.55 + (Math.random() - 0.5) * 40, cls, out, wrong, v: 120 + Math.random() * 90, done: false });
+  }
+  function shape(p, x, y, r) {
+    c.beginPath();
+    if (p.out === 0) c.arc(x, y, r, 0, 6.283);
+    else if (p.out === 1) c.rect(x - r, y - r, r * 2, r * 2);
+    else if (p.out === 2) { c.moveTo(x, y - r * 1.2); c.lineTo(x + r * 1.1, y + r); c.lineTo(x - r * 1.1, y + r); c.closePath(); }
+    else { c.moveTo(x, y - r * 1.3); c.lineTo(x + r * 1.3, y); c.lineTo(x, y + r * 1.3); c.lineTo(x - r * 1.3, y); c.closePath(); }
+    c.fill();
+  }
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000 || 0.016); last = now;
+    if (Math.random() < dt * 9) spawn();
+    c.fillStyle = '#05070A'; c.fillRect(0, 0, W, H);
+    c.strokeStyle = 'rgba(232,234,230,.08)'; c.lineWidth = 1;
+    LANES.forEach((n, i) => { c.beginPath(); c.moveTo(gate + 30, laneY(i)); c.lineTo(W, laneY(i)); c.stroke(); });
+    c.strokeStyle = 'rgba(232,234,230,.35)'; c.setLineDash([3, 5]); c.beginPath(); c.moveTo(gate, 40); c.lineTo(gate, H - 20); c.stroke(); c.setLineDash([]);
+    c.font = '500 13px "Geist Mono", monospace'; c.fillStyle = 'rgba(232,234,230,.5)'; c.textAlign = 'right';
+    LANES.forEach((n, i) => c.fillText(n.toUpperCase(), W - 14, laneY(i) - 10));
+    c.textAlign = 'left'; c.fillText('INGRESS', 14, H * 0.55 - 34); c.fillText('CLASSIFY', gate + 8, 52);
+    for (const p of P) {
+      p.x += p.v * dt;
+      if (p.x > gate) { p.y += (laneY(p.out) - p.y) * Math.min(1, dt * 6); if (!p.done) { p.done = true; total++; if (!p.wrong) right++; } }
+      c.fillStyle = p.x < gate ? 'rgba(232,234,230,.5)' : (p.wrong ? '#FF4A3D' : '#E8EAE6');
+      if (p.x < gate) { c.beginPath(); c.arc(p.x, p.y, 3, 0, 6.283); c.fill(); } else shape(p, p.x, p.y, 4);
+    }
+    P = P.filter(p => p.x < W + 10);
+    if (total) acc.textContent = `accuracy ${(right / total * 100).toFixed(1)}% · n=${total}`;
+  }
+  let raf = 0, vis = false;
+  function loop(now) { frame(now); raf = vis && !reduce() ? requestAnimationFrame(loop) : 0; }
+  for (let i = 0; i < 40; i++) { spawn(); P[P.length - 1].x = Math.random() * W; }
+  frame(performance.now());
+  onScreen(cv, v => { vis = v; if (v && !raf && !reduce()) { last = performance.now(); raf = requestAnimationFrame(loop); } });
+}
+
+/* ---------- IEEEXtreme: 17,000 teams ---------- */
+{
+  const wrap = document.getElementById('xtWrap'), cv = document.getElementById('xt'), c = cv.getContext('2d'), tip = document.getElementById('xtTip');
+  const N = 17000, ME = 418; let pitch = 6, cols = 0, rows = 0, Wd = 0;
+  function draw() {
+    const s = getComputedStyle(document.documentElement), dot = s.getPropertyValue('--ink-3').trim(), acc = s.getPropertyValue('--accent').trim();
+    const DPR = Math.min(2, devicePixelRatio || 1); Wd = wrap.clientWidth; pitch = Wd < 600 ? 4 : 6;
+    cols = Math.floor(Wd / pitch); rows = Math.ceil(N / cols);
+    cv.width = Wd * DPR; cv.height = rows * pitch * DPR; cv.style.height = rows * pitch + 'px'; c.setTransform(DPR, 0, 0, DPR, 0, 0);
+    c.fillStyle = dot; c.globalAlpha = 0.45;
+    const r = pitch < 5 ? 0.9 : 1.2;
+    for (let i = 0; i < N; i++) { if (i === ME - 1) continue; const x = (i % cols) * pitch + pitch / 2, y = Math.floor(i / cols) * pitch + pitch / 2; c.fillRect(x - r, y - r, r * 2, r * 2); }
+    c.globalAlpha = 1; const mx = ((ME - 1) % cols) * pitch + pitch / 2, my = Math.floor((ME - 1) / cols) * pitch + pitch / 2;
+    c.fillStyle = acc; c.beginPath(); c.arc(mx, my, 4, 0, 6.283); c.fill();
+    c.strokeStyle = acc; c.lineWidth = 1; c.beginPath(); c.arc(mx, my, 10, 0, 6.283); c.stroke();
+    c.font = '500 12px "Geist Mono", monospace'; c.fillStyle = acc; c.textAlign = mx > Wd - 160 ? 'right' : 'left';
+    c.fillText('#418 · us', mx + (c.textAlign === 'right' ? -16 : 16), my + 4);
+  }
+  draw(); addEventListener('resize', draw); addEventListener('br-theme', draw);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+  document.fonts && document.fonts.ready.then(draw);
+  cv.addEventListener('pointermove', e => {
+    const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    const i = Math.floor(y / pitch) * cols + Math.floor(x / pitch);
+    if (i < 0 || i >= N || Math.floor(x / pitch) >= cols) { tip.style.opacity = 0; return; }
+    tip.textContent = i + 1 === ME ? '#418 · Banuka’s team' : `#${(i + 1).toLocaleString()}`;
+    tip.style.left = x + 'px'; tip.style.top = y + 'px'; tip.style.opacity = 1;
+  });
+  cv.addEventListener('pointerleave', () => { tip.style.opacity = 0; });
+}
+})();
+</script>
+</body>
+</html>

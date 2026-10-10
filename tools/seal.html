@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seal a letter</title>
+<style>
+  :root { color-scheme: dark; --bg: #0A0606; --ink: #FF5A4C; --dim: rgba(255,90,76,.6); --line: rgba(255,90,76,.25); }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 48px 20px; display: grid; gap: 18px; }
+  h1 { margin: 0; font-size: 1.8rem; letter-spacing: -0.02em; }
+  p { margin: 0; color: var(--dim); }
+  label { font: 500 .72rem ui-monospace, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
+  input, textarea { width: 100%; box-sizing: border-box; font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  textarea { min-height: 220px; resize: vertical; }
+  button { justify-self: start; font: inherit; padding: 12px 20px; border-radius: 999px; border: 0; background: var(--ink); color: var(--bg); cursor: pointer; }
+  pre { white-space: pre-wrap; word-break: break-all; font: .78rem ui-monospace, Menlo, monospace; border: 1px dashed var(--line); border-radius: 12px; padding: 14px; min-height: 60px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Seal a letter</h1>
+  <p>Runs only in this browser tab. Nothing is sent anywhere. The answer is never stored; only the encrypted letter comes out.</p>
+  <div><label for="to">Who it's for (shown on top of the letter)</label><input id="to" value="you"></div>
+  <div><label for="ans">The answer she will type to name the star</label><input id="ans" autocomplete="off"></div>
+  <p>Not case-sensitive. Pick something only she would know: a nickname, a place, a date written the way you two write it.</p>
+  <div><label for="letter">Your letter (blank line = new paragraph)</label><textarea id="letter"></textarea></div>
+  <button id="go" type="button">Seal it</button>
+  <label for="out">Paste this over the SEALED value in assets/secret.js</label>
+  <pre id="out"></pre>
+</main>
+<script>
+document.getElementById('go').addEventListener('click', async () => {
+  const ans = document.getElementById('ans').value, letter = document.getElementById('letter').value, to = document.getElementById('to').value || 'you';
+  const out = document.getElementById('out');
+  if (!ans.trim() || !letter.trim()) { out.textContent = 'Fill in the answer and the letter first.'; return; }
+  const enc = new TextEncoder(), b64 = u => btoa(String.fromCharCode(...u));
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const base = await crypto.subtle.importKey('raw', enc.encode(ans.trim().toLowerCase().normalize('NFKC')), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 250000, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt']);
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify({ to, letter }))));
+  out.textContent = JSON.stringify({ salt: b64(salt), iv: b64(iv), data: b64(ct) });
+});
+</script>
+</body>
+</html>

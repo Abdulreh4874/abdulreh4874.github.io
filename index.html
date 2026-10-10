@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Banuka Rajapaksha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.hero { padding-block: clamp(56px, 9vw, 120px) clamp(28px, 4vw, 48px); }
+.hero .coords { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 28px; }
+.hero .display { font-size: clamp(3.2rem, 10.4vw, 10rem); margin-bottom: 36px; }
+.hero-foot { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; }
+.roles { display: grid; gap: 8px; justify-self: end; }
+.roles span { display: flex; gap: 10px; align-items: baseline; font-size: 0.95rem; color: var(--ink-2); }
+.roles b { font-weight: 500; color: var(--ink); }
+.roles i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; transform: translateY(-2px); }
+@media (max-width: 860px) { .hero-foot { grid-template-columns: 1fr; } .roles { justify-self: start; } }
+
+.scope { position: relative; height: clamp(170px, 22vw, 280px); border-block: 1px solid var(--line); }
+.scope canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y; }
+.scope .rd { position: absolute; top: 12px; display: flex; gap: 18px; }
+.scope .rd.l { left: var(--gut); } .scope .rd.r { right: var(--gut); }
+.scope .rd.b { top: auto; bottom: 12px; }
+
+.tuner { padding-block: clamp(48px, 7vw, 96px) clamp(72px, 10vw, 130px); }
+.dial { position: relative; height: 92px; margin-bottom: 40px; cursor: ew-resize; touch-action: none; user-select: none; -webkit-user-select: none; }
+.dial:focus-visible { outline-offset: 8px; }
+.dial .scale { position: absolute; left: 0; right: 0; top: 18px; height: 34px;
+  background:
+    repeating-linear-gradient(90deg, var(--ink-3) 0 1px, transparent 1px 100%) 0 0 / 12.5% 100% no-repeat,
+    repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 8px);
+  -webkit-mask: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.dial .base { position: absolute; left: 0; right: 0; top: 52px; height: 1px; background: var(--line); }
+.dial .stops { position: absolute; left: 0; right: 0; top: 62px; display: grid; grid-template-columns: repeat(4, 1fr); }
+.dial .stops button { border: 0; background: none; cursor: pointer; padding: 6px 0; display: grid; justify-items: center; gap: 2px; color: var(--ink-3); transition: color var(--q); }
+.dial .stops button:hover, .dial .stops button.on { color: var(--ink); }
+.dial .stops .label { color: inherit; }
+.dial .tick { position: absolute; top: 10px; width: 1px; height: 50px; background: var(--ink); }
+.needle { position: absolute; top: 0; left: 0; width: 2px; height: 64px; margin-left: -1px; background: var(--accent); will-change: transform; }
+.needle::before { content: ""; position: absolute; top: -4px; left: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent); }
+.needle::after { content: ""; position: absolute; inset: -10px -22px; } /* bigger grab target */
+
+.band { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; min-height: 170px; }
+.band .num { font-family: var(--f-mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.08em; }
+.band h2 { font-size: clamp(2.8rem, 7.6vw, 6.6rem); margin-top: 8px; }
+.band-r { display: grid; gap: 18px; justify-items: start; }
+@media (max-width: 860px) { .band { grid-template-columns: 1fr; } }
+
+.now { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.now article { border-top: 1px solid var(--ink); padding-top: 18px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.now .big { font-weight: 600; font-stretch: 82%; letter-spacing: -0.04em; font-size: clamp(3rem, 6vw, 5rem); line-height: 0.9; }
+.now .big .dot { font-size: 0.5em; vertical-align: 0.9em; }
+.now p { margin: 0; color: var(--ink-2); }
+.now a.more { font-size: 0.9rem; text-decoration: none; display: inline-flex; gap: 8px; color: var(--ink); }
+.now a.more:hover { text-decoration: underline; }
+.now .thumb { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 14px; align-items: center; }
+.now .thumb img { width: 76px; height: 76px; object-fit: cover; border-radius: 6px; }
+@media (max-width: 860px) { .now { grid-template-columns: 1fr; } }
+</style>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0B0E13">
+<meta name="description" content="Banuka Rajapaksha: computer engineer and designer in Colombo. Software Engineer Intern at WSO2 (OpenChoreo). Coffee runs through my circuits.">
+<meta property="og:title" content="Banuka Rajapaksha">
+<meta property="og:description" content="Computer engineer and designer. Coffee runs through my circuits.">
+<meta property="og:url" content="https://prageethbanuka.github.io/">
+<script>try { const t = localStorage.getItem('br-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+<script src="assets/site.js"></script>
+<script>BR.nav('home', { draw: true })</script>
+
+<main id="main">
+  <section class="wrap hero">
+    <div class="grid">
+      <div class="hang"><span class="label">Index · v.2026</span></div>
+      <div class="main">
+        <div class="coords"><span class="label">6.7951° N · 79.9008° E</span><span class="label">Moratuwa, Colombo, Sri Lanka</span><span class="label">Full-stack · DevOps · Embedded · AI</span></div>
+        <h1 class="display">Coffee runs through my circuits<span class="dot">.</span></h1>
+        <div class="hero-foot">
+          <p class="lede">I'm Banuka Rajapaksha, a computer engineer and designer in Colombo. I build systems that work in production, not just prototypes, and I design how people meet them.</p>
+          <div class="roles">
+            <span><i></i><b>Software Engineer Intern</b> WSO2 · OpenChoreo</span>
+            <span><i style="background:var(--ink-3)"></i><b>Computer Engineering</b> University of Ruhuna</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="scope" id="scope" aria-hidden="true">
+    <canvas id="trace"></canvas>
+    <div class="rd l"><span class="label" id="rdMode">CH 01 · Clock</span></div>
+    <div class="rd r"><span class="label" id="rdVal">96 BPM · 50% duty</span></div>
+    <div class="rd l b"><span class="label">Move across the trace</span></div>
+    <div class="rd r b"><span class="label" id="rdFps">-- fps</span></div>
+  </div>
+
+  <section class="wrap tuner" aria-labelledby="bandName">
+    <div class="grid">
+      <div class="hang"><span class="label">Tune in</span><br><span class="label" style="color:var(--ink-3);opacity:.8">Drag or flick the needle</span></div>
+      <div class="main">
+        <div class="dial" id="dial" tabindex="0" role="slider" aria-label="Choose a section" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-valuetext="Engineering">
+          <div class="scale"></div><div class="base"></div>
+          <div class="stops" id="stops"></div>
+          <div class="needle" id="needle"></div>
+        </div>
+        <div class="band" id="band">
+          <div>
+            <div class="num" id="bandNum">CH 01</div>
+            <h2 class="display" id="bandName">Engineering</h2>
+          </div>
+          <div class="band-r">
+            <p class="lede" id="bandText">Full-stack, DevOps, embedded and AI. Six projects running live in your browser.</p>
+            <a class="btn" id="bandGo" href="engineering.html">Tune in <span class="arr">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <div class="grid">
+      <div class="hang"><span class="label">Right now</span></div>
+      <div class="main now">
+        <article>
+          <span class="label">On the clock</span>
+          <h3 class="h3">Progressive delivery for OpenChoreo at WSO2</h3>
+          <p>Software Engineer Intern since 15 June 2026, building safer, gradual rollouts into WSO2’s open-source developer platform for Kubernetes.</p>
+          <a class="more" href="experience.html">Experience <span>→</span></a>
+        </article>
+        <article>
+          <span class="label">Signal strength</span>
+          <div class="big">#22<span class="dot">●</span></div>
+          <p>in Sri Lanka at IEEEXtreme 18.0. #418 of 17,000+ teams worldwide, in 24 hours of competitive programming.</p>
+          <a class="more" href="engineering.html#xtreme">See all 17,000 <span>→</span></a>
+        </article>
+        <article>
+          <span class="label">Latest poster</span>
+          <div class="thumb"><img src="assets/work/w1.webp" alt="AI Workshop poster" width="76" height="76"><p><b style="color:var(--ink);font-weight:500">AI Workshop</b><br>IEEE Student Branch, University of Ruhuna · 2025</p></div>
+          <a class="more" href="design.html">Design <span>→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>BR.footer()</script>
+
+<script>
+(() => {
+const { Spring, project, clamp, tracker, reduce, blip } = BR;
+const BANDS = [
+  { id: 'engineering', name: 'Engineering', href: 'engineering.html', mode: 'Clock', val: '96 BPM · 50% duty', text: 'Full-stack, DevOps, embedded and AI. Six projects running live in your browser.' },
+  { id: 'design', name: 'Design', href: 'design.html', mode: 'Sine', val: 'Two-second read', text: 'Visual branding for national IEEE programmes, SLSAC and faculty events.' },
+  { id: 'experience', name: 'Experience', href: 'experience.html', mode: 'Step', val: 'Rising edges', text: 'WSO2, SEDS Ruhuna, IEEE and IESL, and the University of Ruhuna.' },
+  { id: 'offhours', name: 'Off-hours', href: 'offhours.html', mode: 'Scintillation', val: 'Starlight · 96 BPM', text: 'Brass band, drums and the night sky, in red light.' },
+];
+
+/* ---------- oscilloscope trace ---------- */
+const cv = document.getElementById('trace'), cx = cv.getContext('2d'), scope = document.getElementById('scope');
+let W = 0, H = 0, DPR = 1, col = {};
+const w = BANDS.map((_, i) => new Spring(i === 0 ? 1 : 0, { damping: 1, response: 0.5 }));
+const amp = new Spring(0, { damping: 1, response: 0.35 });
+const px = new Spring(0.72, { damping: 1, response: 0.3 });
+const heart = new Spring(0, { damping: 1, response: 0.6 }); let heartAt = 0;
+// a heartbeat (ECG) trace for the hidden channel
+const ecg = (u, t) => { let p = (u * 3 - t * 1.2) % 1; if (p < 0) p += 1; const g = (c, w, a) => a * Math.exp(-(((p - c) / w) ** 2)); return g(0.12, 0.035, 0.18) - g(0.27, 0.012, 0.25) + g(0.3, 0.012, 1.25) - g(0.33, 0.014, 0.45) + g(0.55, 0.06, 0.3); };
+function readCol() { const s = getComputedStyle(document.documentElement); col = { ink: s.getPropertyValue('--ink').trim(), line: s.getPropertyValue('--line-2').trim(), acc: s.getPropertyValue('--accent').trim(), ink3: s.getPropertyValue('--ink-3').trim() }; }
+function size() { DPR = Math.min(2, devicePixelRatio || 1); W = scope.clientWidth; H = scope.clientHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+const shapes = [
+  (u, t) => Math.tanh(9 * Math.sin(u * 2 * Math.PI * 7 - t * 2 * Math.PI * 1.6)),                 // clock
+  (u, t) => Math.sin(u * 2 * Math.PI * 3.2 - t * 2.4),                                              // sine
+  (u, t) => { const p = (u * 6 - t * 0.35) % 1, q = p < 0 ? p + 1 : p; return Math.tanh(14 * (q - 0.5)) * 0.8 + (q - 0.5) * 0.4; }, // step
+  (u, t) => 0.55 * Math.sin(u * 47 + t * 3.1) * Math.sin(u * 13 - t * 1.7) + 0.35 * Math.sin(u * 91 - t * 5.3) + 0.2 * Math.sin(u * 7 + t), // scintillation
+];
+function y(u, t) {
+  let v = 0; for (let i = 0; i < 4; i++) if (w[i].x > 0.001) v += w[i].x * shapes[i](u, t);
+  if (heart.x > 0.001) v = v * (1 - heart.x) + heart.x * ecg(u, t);
+  const bump = Math.exp(-(((u - px.x) / 0.16) ** 2));
+  const a = 0.14 + 0.62 * (0.25 + 0.75 * amp.x) * bump;
+  return H / 2 - v * a * (H * 0.42);
+}
+let fpsT = performance.now(), fpsN = 0; const fpsEl = document.getElementById('rdFps');
+function draw(now) {
+  const t = reduce() ? 0 : now / 1000;
+  cx.clearRect(0, 0, W, H);
+  cx.strokeStyle = col.line; cx.lineWidth = 1; cx.beginPath();
+  for (let x = 48; x < W; x += 48) { cx.moveTo(x + 0.5, 0); cx.lineTo(x + 0.5, H); }
+  for (let k = 1; k < 4; k++) { const yy = Math.round(H * k / 4) + 0.5; cx.moveTo(0, yy); cx.lineTo(W, yy); }
+  cx.stroke();
+  cx.strokeStyle = col.ink; cx.lineWidth = 1.5; cx.lineJoin = 'round'; cx.beginPath();
+  const step = 2;
+  for (let x = 0; x <= W; x += step) { const v = y(x / W, t); x ? cx.lineTo(x, v) : cx.moveTo(x, v); }
+  cx.stroke();
+  const sx = px.x * W, sy = y(px.x, t);
+  cx.strokeStyle = col.ink3; cx.setLineDash([2, 4]); cx.beginPath(); cx.moveTo(sx + 0.5, 0); cx.lineTo(sx + 0.5, H); cx.stroke(); cx.setLineDash([]);
+  cx.fillStyle = col.acc; cx.globalAlpha = 0.18; cx.beginPath(); cx.arc(sx, sy, 12, 0, 6.283); cx.fill();
+  cx.globalAlpha = 1; cx.beginPath(); cx.arc(sx, sy, 4.5, 0, 6.283); cx.fill();
+  fpsN++; if (now - fpsT > 500) { fpsEl.textContent = `${Math.round(fpsN * 1000 / (now - fpsT))} fps`; fpsN = 0; fpsT = now; }
+}
+let raf = 0, visible = true;
+function loop(now) { draw(now); raf = (visible && !reduce()) ? requestAnimationFrame(loop) : 0; }
+function start() { if (!raf && visible) raf = requestAnimationFrame(loop); }
+readCol(); size(); draw(performance.now()); if (!reduce()) start();
+addEventListener('resize', () => { size(); draw(performance.now()); });
+addEventListener('br-theme', () => { readCol(); draw(performance.now()); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readCol(); draw(performance.now()); });
+new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !reduce()) start(); }).observe(scope);
+[...w, amp, px, heart].forEach(s => s.on(() => { if (reduce()) draw(0); }));
+scope.addEventListener('pointermove', e => { const r = scope.getBoundingClientRect(); px.to(clamp((e.clientX - r.left) / r.width, 0, 1), { damping: 1, response: 0.18 }); amp.to(1); });
+scope.addEventListener('pointerleave', () => { amp.to(0, { response: 0.6 }); px.to(0.72, { response: 0.8 }); });
+
+/* ---------- tuner dial ---------- */
+const dial = document.getElementById('dial'), needle = document.getElementById('needle'), stops = document.getElementById('stops');
+BANDS.forEach((b, i) => {
+  const btn = document.createElement('button'); btn.type = 'button'; btn.dataset.i = i; btn.tabIndex = -1;
+  btn.innerHTML = `<span class="label">0${i + 1}</span><span style="font-size:.9rem">${b.name}</span>`;
+  stops.appendChild(btn);
+});
+const stopX = i => dial.clientWidth * (i + 0.5) / 4;
+const nx = new Spring(0, { damping: 1, response: 0.4 }).on(x => { needle.style.transform = `translateX(${x}px)`; liveBand(x); });
+let cur = -1;
+function setBand(i, fromNeedle) {
+  if (i === cur) return; cur = i; const b = BANDS[i];
+  if (heart.target === 1) { if (performance.now() - heartAt > 4000) heart.to(0); else return; } // keep the clue on screen for a moment
+  document.getElementById('bandNum').textContent = `CH 0${i + 1}`;
+  document.getElementById('bandName').textContent = b.name;
+  document.getElementById('bandText').textContent = b.text;
+  const go = document.getElementById('bandGo'); go.href = b.href;
+  document.getElementById('rdMode').textContent = `CH 0${i + 1} · ${b.mode}`;
+  document.getElementById('rdVal').textContent = b.val;
+  dial.setAttribute('aria-valuenow', i + 1); dial.setAttribute('aria-valuetext', b.name);
+  [...stops.children].forEach((s, k) => s.classList.toggle('on', k === i));
+  w.forEach((s, k) => s.to(k === i ? 1 : 0));
+  if (fromNeedle !== false) blip('tick');
+}
+function liveBand(x) { setBand(clamp(Math.floor(x / dial.clientWidth * 4), 0, 3)); }
+nx.set(stopX(0)); setBand(0, false);
+addEventListener('resize', () => nx.set(stopX(cur)));
+const trk = tracker(); let drag = null;
+dial.addEventListener('pointerdown', e => {
+  const r = dial.getBoundingClientRect(), x = e.clientX - r.left;
+  if (e.target.closest('.stops button') && e.pointerType !== 'mouse') return;
+  const onNeedle = Math.abs(x - nx.x) < 24;
+  dial.setPointerCapture(e.pointerId); nx.stop();
+  drag = { off: onNeedle ? x - nx.x : 0, moved: 0, x0: x }; trk.reset(); trk.add(nx.x);
+  if (!onNeedle) nx.to(x, { damping: 1, response: 0.22 });
+});
+dial.addEventListener('pointermove', e => {
+  if (!drag) return; const r = dial.getBoundingClientRect(), x = e.clientX - r.left;
+  drag.moved = Math.max(drag.moved, Math.abs(x - drag.x0));
+  if (drag.moved < 4) return;
+  const raw = x - drag.off, max = dial.clientWidth;
+  const v = raw < 0 ? BR.rubber(raw, max) : raw > max ? max + BR.rubber(raw - max, max) : raw;
+  nx.set(v); trk.add(v);
+  holdCheck(v / max);
+});
+// hidden channel: hold the needle exactly between Design and Experience
+let holdT = 0;
+function heartbeat() {
+  holdT = 0; if (!drag || heart.target === 1) return;
+  heart.to(1); heartAt = performance.now(); blip('tone', true);
+  const clue = (window.BRSecret && BRSecret.TRAIL.clue2) || '';
+  document.getElementById('rdMode').textContent = 'CH ♥ · Heartbeat'; document.getElementById('rdVal').textContent = '72 BPM';
+  document.getElementById('bandNum').textContent = 'CH ♥'; document.getElementById('bandName').textContent = 'Heartbeat';
+  document.getElementById('bandText').textContent = clue; document.getElementById('bandGo').href = 'offhours.html'; cur = -1;
+}
+function holdCheck(f) {
+  const inZone = Math.abs(f - 0.5) <= 0.025;
+  if (!inZone) { clearTimeout(holdT); holdT = 0; return; }
+  if (!holdT) holdT = setTimeout(heartbeat, 1600); // fires even if the pointer stays perfectly still
+}
+const endDrag = e => {
+  clearTimeout(holdT); holdT = 0;
+  if (!drag) return; const d = drag; drag = null;
+  if (d.moved < 4) { const i = clamp(Math.floor(d.x0 / dial.clientWidth * 4), 0, 3); nx.to(stopX(i), { damping: 1, response: 0.35 }); return; }
+  const v = trk.vel(), land = nx.x + project(v, 0.995);
+  const i = clamp(Math.floor(land / dial.clientWidth * 4), 0, 3);
+  nx.to(stopX(i), { velocity: v, damping: Math.abs(v) > 300 ? 0.78 : 1, response: 0.38 });
+};
+dial.addEventListener('pointerup', endDrag); dial.addEventListener('pointercancel', endDrag);
+stops.addEventListener('pointerenter', () => {}, true);
+[...stops.children].forEach((b, i) => {
+  b.addEventListener('click', () => nx.to(stopX(i), { damping: 1, response: 0.35 }));
+  b.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse' && !drag) nx.to(stopX(i), { damping: 1, response: 0.4 }); });
+});
+dial.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); nx.to(stopX(Math.min(3, cur + 1))); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); nx.to(stopX(Math.max(0, cur - 1))); }
+  if (e.key === 'Enter') location.href = BANDS[cur].href;
+});
+})();
+</script>
+</body>
+</html>

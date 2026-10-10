@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Experience · Banuka Rajapaksha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0B0E13">
+<meta name="description" content="Banuka Rajapaksha: computer engineer and designer in Colombo. Software Engineer Intern at WSO2 (OpenChoreo). Coffee runs through my circuits.">
+<meta property="og:title" content="Banuka Rajapaksha">
+<meta property="og:description" content="Computer engineer and designer. Coffee runs through my circuits.">
+<meta property="og:url" content="https://prageethbanuka.github.io/">
+
+<style>
+.feature { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px 56px; }
+@media (max-width: 1000px) { .feature { grid-template-columns: 1fr; } }
+.co { font-weight: 600; font-stretch: 78%; letter-spacing: -0.05em; line-height: 0.82; font-size: clamp(5rem, 17vw, 15rem); margin: 0 0 18px; }
+.co .dot { font-size: 0.4em; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--ink); margin: 0; }
+.facts div { padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
+.facts div:nth-child(odd) { padding-right: 16px; }
+.facts dd { margin: 0; font-weight: 500; }
+.facts dt { font-family: var(--f-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.feature .prose h3 { font-family: var(--f-mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.feature .prose p { margin-bottom: 22px; }
+
+/* canary demo */
+.canary { margin-top: 28px; background: var(--screen); color: var(--screen-ink); border-radius: 14px; padding: 18px; display: grid; gap: 14px; font-family: var(--f-mono); font-size: 0.74rem; }
+.canary .top { display: flex; justify-content: space-between; gap: 10px; color: rgba(232,234,230,.55); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.66rem; }
+.split { height: 34px; border-radius: 8px; overflow: hidden; display: flex; background: rgba(232,234,230,.08); }
+.split .v1 { background: rgba(232,234,230,.22); display: flex; align-items: center; padding-left: 10px; white-space: nowrap; overflow: hidden; }
+.split .v2 { background: #3CC2B4; color: #05070A; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; white-space: nowrap; overflow: hidden; transition: background-color var(--h); }
+.canary.bad .split .v2 { background: #FF4A3D; }
+.metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.metrics div { border-top: 1px solid rgba(232,234,230,.12); padding-top: 8px; }
+.metrics span { display: block; color: rgba(232,234,230,.5); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.metrics b { font-weight: 500; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.metrics b.e { color: #FF4A3D; }
+.canary .msg { color: rgba(232,234,230,.75); min-height: 1.4em; }
+.canary .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.canary .btn { background: #E8EAE6; color: #05070A; border-color: #E8EAE6; padding: 8px 14px; font-size: 0.82rem; font-family: var(--f-sans); }
+.canary .btn.ghost { background: transparent; color: #E8EAE6; border-color: rgba(232,234,230,.25); }
+
+.clock-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
+.wave { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+.wave-now { fill: none; stroke: var(--accent); stroke-width: 2; }
+.edge-hit { fill: transparent; cursor: pointer; }
+.edge-mark { fill: var(--bg); stroke: var(--ink); stroke-width: 1.5; transition: fill var(--q); }
+.edge-mark.on { fill: var(--accent); stroke: var(--accent); }
+.grid-v { stroke: var(--line); stroke-width: 1; }
+.ms { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.ms button { text-align: left; border: 0; border-top: 1px solid var(--line); padding: 12px 0 0; background: none; cursor: pointer; display: grid; gap: 4px; align-content: start; transition: border-color var(--q); }
+.ms button[aria-pressed="true"] { border-top-color: var(--accent); }
+.ms button b { font-weight: 500; letter-spacing: -0.01em; font-size: 0.95rem; line-height: 1.3; }
+.detail { margin-top: 36px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; min-height: 140px; }
+.detail h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); }
+@media (max-width: 860px) { .ms { grid-template-columns: repeat(3, minmax(0, 1fr)); } .detail { grid-template-columns: 1fr; } }
+
+.roles { border-top: 1px solid var(--ink); }
+.role { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) 150px; gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid var(--line); transition: opacity var(--h); }
+.roles:hover .role { opacity: 0.4; } .roles .role:hover { opacity: 1; }
+.role b { font-weight: 500; font-size: 1.12rem; letter-spacing: -0.015em; display: block; }
+.role .org { color: var(--ink-2); font-size: 0.92rem; }
+.role p { margin: 0; color: var(--ink-2); }
+.role .when { text-align: right; }
+@media (max-width: 860px) { .role { grid-template-columns: 1fr; } .role .when { text-align: left; order: -1; } }
+
+.edu { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+.edu article { border-top: 1px solid var(--ink); padding-top: 16px; display: grid; gap: 8px; align-content: start; }
+.edu .gpa { font-weight: 600; font-stretch: 80%; letter-spacing: -0.04em; font-size: clamp(3rem, 6vw, 4.6rem); line-height: 0.9; }
+.edu .gpa span { font-size: 0.35em; color: var(--ink-3); letter-spacing: 0; }
+.edu p { margin: 0; color: var(--ink-2); }
+@media (max-width: 860px) { .edu { grid-template-columns: 1fr; } }
+.certs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.certs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.certs li b { font-weight: 500; }
+
+.kit { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; }
+.kit dl { margin: 0; display: grid; grid-template-columns: 140px minmax(0, 1fr); border-top: 1px solid var(--line); padding: 16px 0; gap: 12px; }
+.kit dt { font-family: var(--f-mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); padding-top: 3px; }
+.kit dd { margin: 0; line-height: 1.7; }
+@media (max-width: 860px) { .kit { grid-template-columns: 1fr; } .kit dl { grid-template-columns: 110px minmax(0, 1fr); } }
+</style>
+<script>try { const t = localStorage.getItem('br-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+<script src="assets/site.js"></script>
+<script>BR.nav('experience')</script>
+
+<main>
+  <section class="wrap page-head">
+    <div class="grid">
+      <div class="hang"><span class="label">03 · Experience</span></div>
+      <div class="main">
+        <div class="meta-row"><span class="label">Moratuwa, Colombo</span><span class="label">Open to internships in SE, DevOps, Embedded and AI</span></div>
+        <h1 class="display">Building at WSO2. Studying at Ruhuna<span class="dot">.</span></h1>
+        <p class="lede">I build systems that work in production, not just prototypes. My core is full-stack, but I like the whole picture: write the backend, deploy it, and make sure it holds up. Good engineering and good design aren't opposites.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WSO2 -->
+  <section class="wrap section" aria-labelledby="wso2-h">
+    <div class="grid">
+      <div class="hang"><span class="label" style="color:var(--accent)">● Now</span><br><span class="label">Since 15 June 2026</span></div>
+      <div class="main">
+        <p class="co" aria-hidden="true">WSO2<span class="dot">.</span></p>
+        <div class="feature">
+          <div class="prose">
+            <h2 class="h2" id="wso2-h" style="color:var(--ink);margin-bottom:28px">Software Engineer Intern, OpenChoreo</h2>
+            <h3>The platform</h3>
+            <p>OpenChoreo is WSO2's open-source developer platform for Kubernetes. Teams describe their services, and the platform handles building, deploying and running them.</p>
+            <h3>My project · Progressive delivery</h3>
+            <p>I'm building progressive delivery into OpenChoreo. A new version gets a small slice of real traffic first. The platform watches its health and widens the rollout only while it holds up. If it starts failing, traffic goes back to the stable version before most users notice.</p>
+            <h3>What it is teaching me</h3>
+            <p>How to ship inside a large open-source codebase: design reviews, tests that earn their keep, and release discipline.</p>
+          </div>
+          <div>
+            <dl class="facts">
+              <div><dt>Company</dt><dd>WSO2</dd></div>
+              <div><dt>Role</dt><dd>Software Engineer Intern</dd></div>
+              <div><dt>Team</dt><dd>OpenChoreo</dd></div>
+              <div><dt>Project</dt><dd>Progressive delivery</dd></div>
+              <div><dt>Started</dt><dd>15 June 2026</dd></div>
+              <div><dt>Stack</dt><dd>Go · Kubernetes · Docker</dd></div>
+            </dl>
+            <div class="canary" id="canary">
+              <div class="top"><span>Canary rollout · concept demo</span><span id="cStage">Stage 0 of 4</span></div>
+              <div class="split"><div class="v1" id="cV1">v1 stable 100%</div><div class="v2" id="cV2"></div></div>
+              <div class="metrics">
+                <div><span>v2 traffic</span><b id="cT">0%</b></div>
+                <div><span>v2 error rate</span><b id="cE">0.0%</b></div>
+                <div><span>v2 p95 latency</span><b id="cL">-- ms</b></div>
+              </div>
+              <div class="msg" id="cMsg">Ready to roll out v2.</div>
+              <div class="btns"><button class="btn" type="button" id="cGo">Start rollout</button><button class="btn ghost" type="button" id="cBad" disabled>Inject a fault</button></div>
+            </div>
+            <p class="note" style="font-family:var(--f-mono);font-size:.6875rem;color:var(--ink-3);margin-top:10px">Explains the idea only. Not WSO2 or OpenChoreo code.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="wrap section" aria-labelledby="tl-h">
+    <div class="grid">
+      <div class="hang"><span class="label">Timeline</span><br><span class="label">Each rising edge is a milestone</span></div>
+      <div class="main">
+        <h2 class="h2" id="tl-h" style="margin-bottom:40px">The clock so far</h2>
+        <div class="clock-wrap"><svg id="wave" viewBox="0 0 1000 140" aria-hidden="true"></svg></div>
+        <div class="ms" id="ms" role="group" aria-label="Milestones"></div>
+        <div class="detail" aria-live="polite">
+          <div><div class="label" id="dWhen"></div><h3 class="h3" id="dTitle" style="margin-top:6px"></h3></div>
+          <p class="prose" id="dText" style="margin:0"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEADERSHIP -->
+  <section class="wrap section" aria-labelledby="lead-h">
+    <div class="grid">
+      <div class="hang"><span class="label">Leadership</span><br><span class="label">Design, space and community</span></div>
+      <div class="main">
+        <h2 class="h2" id="lead-h" style="margin-bottom:32px">Roles beyond the code</h2>
+        <div class="roles">
+          <div class="role"><div><b>Observation Division Manager</b><span class="org">SEDS Ruhuna</span></div><p>Leading the division behind the "Ad Astra" night observation camps and community stargazing. Running the chapter's telescopes and mounts, training members in observing and astrophotography, and planning the 2026 astronomical calendar.</p><span class="label when">Jan 2026 – now</span></div>
+          <div class="role"><div><b>Graphic Design Coordinator</b><span class="org">SLSAC PV</span></div><p>Leading visual identity and digital content, from concept to delivery. Directing print and digital assets, video edits, the media library and the design review pipeline.</p><span class="label when">Jan 2026 – now</span></div>
+          <div class="role"><div><b>Publicity and Public Visibility Committee Lead</b><span class="org">IEEE PES Student Chapter, University of Ruhuna</span></div><p>Visual campaigns for chapter programmes, including VoltCast.</p><span class="label when">2025 – Feb 2026</span></div>
+          <div class="role"><div><b>Editor</b><span class="org">IESL Ruhuna Engineering Students Chapter</span></div><p>Owning all official content on the chapter's digital platforms: posts, informative visuals, and consistent public communication.</p><span class="label when">Jan 2025 – Feb 2026</span></div>
+          <div class="role"><div><b>Member</b><span class="org">IEEE</span></div><p>Member since 2024. Visual branding for national IEEE programmes.</p><span class="label when">2024 – now</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="wrap section" aria-labelledby="edu-h">
+    <div class="grid">
+      <div class="hang"><span class="label">Education</span></div>
+      <div class="main">
+        <h2 class="h2" id="edu-h" style="margin-bottom:32px">Where I learned it</h2>
+        <div class="edu">
+          <article>
+            <span class="label">May 2023 – 2027</span>
+            <b style="font-weight:500;font-size:1.1rem">BSc Engineering, Computer Engineering</b>
+            <p>Faculty of Engineering, University of Ruhuna, Galle.</p>
+            <div class="chips" style="margin-top:6px"><span class="chip">Computer architecture</span><span class="chip">Networks</span><span class="chip">Distributed systems</span><span class="chip">Machine learning</span><span class="chip">Software QA</span></div>
+          </article>
+          <article>
+            <span class="label">2013 – 2022</span>
+            <b style="font-weight:500;font-size:1.1rem">Physical Sciences</b>
+            <p>Ranabima Royal College, Peradeniya. Seven years in the Astronomical and Space Science Society and four in the Senior Western Brass Band.</p>
+          </article>
+        </div>
+        <h3 class="label" style="margin:56px 0 12px">Competitions and certifications</h3>
+        <ul class="certs">
+          <li><b>IEEEXtreme 18.0 · #418 globally, #22 in Sri Lanka</b><span class="label">2024</span></li>
+          <li><b>Algoxplore 1.0, inter-university hackathon · NSBM Green University</b><span class="label">Hackathon</span></li>
+          <li><b>Exploratory Data Analysis for Machine Learning</b><span class="label">Certificate</span></li>
+          <li><b>JavaScript for Beginners</b><span class="label">Certificate</span></li>
+          <li><b>Stardust Sanctuary night sky observation camp</b><span class="label">Astronomy</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLKIT -->
+  <section class="wrap section" aria-labelledby="kit-h">
+    <div class="grid">
+      <div class="hang"><span class="label">Toolkit</span></div>
+      <div class="main">
+        <h2 class="h2" id="kit-h" style="margin-bottom:32px">What I reach for</h2>
+        <div class="kit">
+          <dl><dt>Languages</dt><dd>Go, Python, Java, C++, TypeScript, JavaScript, Dart</dd></dl>
+          <dl><dt>Platforms</dt><dd>Kubernetes, Docker, OpenChoreo, AWS, Linux</dd></dl>
+          <dl><dt>DevOps</dt><dd>Terraform, Ansible, Jenkins, CI/CD, GitOps</dd></dl>
+          <dl><dt>AI and data</dt><dd>TensorFlow Lite, multi-agent systems, Redis, Sentry</dd></dl>
+          <dl><dt>Frameworks</dt><dd>Spring, FastAPI, React, NestJS, Flutter, NumPy</dd></dl>
+          <dl><dt>Design</dt><dd>Photoshop, Illustrator, Affinity, Lightroom, After Effects, Premiere Pro, Final Cut Pro</dd></dl>
+        </div>
+        <div class="tx-row" style="margin-top:40px">
+          <a class="btn" href="https://www.linkedin.com/in/banuka-rajapaksha" target="_blank" rel="noopener">Full history on LinkedIn <span class="arr">↗</span></a>
+          <span class="label">CV available on request</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>BR.footer()</script>
+
+<script>
+(() => {
+const { blip, Spring, reduce } = BR;
+
+/* ---------- canary rollout (concept) ---------- */
+{
+  const STEPS = [5, 25, 50, 100];
+  const box = document.getElementById('canary'), v1 = document.getElementById('cV1'), v2 = document.getElementById('cV2');
+  const go = document.getElementById('cGo'), bad = document.getElementById('cBad');
+  const T = document.getElementById('cT'), E = document.getElementById('cE'), L = document.getElementById('cL'), M = document.getElementById('cMsg'), SG = document.getElementById('cStage');
+  const share = new Spring(0, { damping: 1, response: 0.5 }).on(x => {
+    const p = Math.max(0, Math.min(100, x));
+    v1.style.width = (100 - p) + '%'; v2.style.width = p + '%';
+    v1.textContent = p < 88 ? `v1 stable ${Math.round(100 - p)}%` : ''; v2.textContent = p > 14 ? `v2 ${Math.round(p)}%` : '';
+    T.textContent = Math.round(p) + '%';
+  });
+  share.set(0);
+  let timer = null, stage = 0, fault = false, err = 0;
+  const tick = () => {
+    err = fault ? Math.min(9, err + 1.6 + Math.random()) : Math.max(0.1, 0.1 + Math.random() * 0.3);
+    E.textContent = err.toFixed(1) + '%'; E.className = err > 2 ? 'e' : '';
+    L.textContent = Math.round((fault ? 420 : 118) + Math.random() * 30) + ' ms'; L.className = fault ? 'e' : '';
+    if (fault && err > 2) return rollback();
+  };
+  function rollback() {
+    clearInterval(timer); timer = null; box.classList.add('bad');
+    M.textContent = `Error rate ${err.toFixed(1)}% is over the 2% limit. Rolling back to v1.`; SG.textContent = 'Rolled back';
+    share.to(0, { damping: 1, response: 0.45, then: () => { M.textContent = 'Rolled back. Only a small slice of users ever saw v2.'; box.classList.remove('bad'); } });
+    go.textContent = 'Start again'; go.disabled = false; bad.disabled = true; blip('tone');
+  }
+  function next() {
+    if (stage >= STEPS.length) { clearInterval(timer); timer = null; M.textContent = 'v2 is healthy at 100%. Rollout complete.'; go.textContent = 'Start again'; go.disabled = false; bad.disabled = true; blip('tone'); return; }
+    share.to(STEPS[stage], { damping: 1, response: 0.5 }); SG.textContent = `Stage ${stage + 1} of 4`;
+    M.textContent = `Sending ${STEPS[stage]}% of traffic to v2. Watching health for one interval…`; stage++; blip('tick');
+  }
+  go.addEventListener('click', () => {
+    fault = false; err = 0; stage = 0; box.classList.remove('bad'); share.set(0);
+    go.disabled = true; bad.disabled = false; next();
+    let n = 0; clearInterval(timer);
+    timer = setInterval(() => { tick(); if (!timer) return; if (++n % 4 === 0) next(); }, reduce() ? 300 : 625);
+  });
+  bad.addEventListener('click', () => { fault = true; bad.disabled = true; M.textContent = 'Fault injected into v2. Watching…'; });
+}
+
+/* ---------- clock timeline ---------- */
+const M = [
+  { when: 'May 2023', title: 'Started Computer Engineering, University of Ruhuna', short: 'Joined Ruhuna', text: 'Began a BSc in Engineering at the Faculty of Engineering in Galle, where hardware meets software. Expected to graduate in 2027.' },
+  { when: '2024', title: 'IEEE member, SEDS Ruhuna observer', short: 'IEEE and SEDS', text: 'Joined IEEE and the Observation Division of SEDS Ruhuna, bringing a school-days love of astronomy to university.' },
+  { when: 'October 2024', title: 'IEEEXtreme 18.0', short: '#22 in Sri Lanka', text: '24 hours of competitive programming against more than 17,000 teams. Finished #418 worldwide and #22 in Sri Lanka.' },
+  { when: 'January 2025', title: 'Editor, IESL. Publicity lead, IEEE PES', short: 'Leading content', text: 'Took over official content for the IESL Ruhuna chapter and led publicity for the IEEE PES Student Chapter, including the VoltCast campaign.' },
+  { when: 'January 2026', title: 'Observation Division Manager, SEDS Ruhuna', short: 'Leading SEDS and SLSAC design', text: 'Took charge of the SEDS Ruhuna Observation Division and became Graphic Design Coordinator for SLSAC PV.' },
+  { when: '15 June 2026 · Now', title: 'Software Engineer Intern, WSO2', short: 'Interning at WSO2', text: 'Joined the OpenChoreo team to build progressive delivery into WSO2’s open-source developer platform for Kubernetes.' },
+];
+const X = [70, 230, 390, 550, 710, 870], LO = 100, HI = 36;
+const svg = document.getElementById('wave');
+let d = `M0 ${LO}`;
+X.forEach((x, i) => { d += ` H${x} V${HI}`; if (i < X.length - 1) d += ` H${x + 90} V${LO}`; });
+const grid = Array.from({ length: 21 }, (_, i) => `<line class="grid-v" x1="${i * 50}" y1="20" x2="${i * 50}" y2="116"/>`).join('');
+svg.innerHTML = `${grid}<path class="wave" d="${d}"/><path class="wave-now" d="M${X[5]} ${HI} H1000"/>` +
+  X.map((x, i) => `<circle class="edge-mark" data-i="${i}" cx="${x}" cy="${HI}" r="6"/><rect class="edge-hit" data-i="${i}" x="${x - 30}" y="10" width="60" height="110"/>`).join('') +
+  `<text x="1000" y="24" text-anchor="end" font-family="Geist Mono, monospace" font-size="12" fill="var(--accent)">NOW</text>`;
+const ms = document.getElementById('ms');
+ms.innerHTML = M.map((m, i) => `<button type="button" data-i="${i}" aria-pressed="false"><span class="label">${m.when}</span><b>${m.short}</b></button>`).join('');
+function pick(i, quiet) {
+  const m = M[i];
+  document.getElementById('dWhen').textContent = m.when;
+  document.getElementById('dTitle').textContent = m.title;
+  document.getElementById('dText').textContent = m.text;
+  svg.querySelectorAll('.edge-mark').forEach(c => c.classList.toggle('on', +c.dataset.i === i));
+  ms.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', +b.dataset.i === i));
+  if (!quiet) blip('tick');
+}
+svg.addEventListener('pointerover', e => { const t = e.target.closest('[data-i]'); if (t) pick(+t.dataset.i); });
+svg.addEventListener('click', e => { const t = e.target.closest('[data-i]'); if (t) pick(+t.dataset.i); });
+ms.addEventListener('click', e => { const b = e.target.closest('button'); if (b) pick(+b.dataset.i); });
+ms.addEventListener('focusin', e => { const b = e.target.closest('button'); if (b) pick(+b.dataset.i, true); });
+pick(5, true);
+})();
+</script>
+</body>
+</html>
