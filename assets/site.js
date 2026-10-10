@@ -61,14 +61,36 @@
   /* ---------- sound: off by default, quantised feel ---------- */
   let ctx = null;
   const sound = { on: store.get('br-sound') === 'on' };
-  function ac() { if (!ctx) { const C = window.AudioContext || window.webkitAudioContext; if (C) ctx = new C(); } if (ctx && ctx.state === 'suspended') ctx.resume(); return ctx; }
+  function ac() { if (!ctx) { const C = window.AudioContext || window.webkitAudioContext; if (C) ctx = new C(); } if (ctx && ctx.state !== 'running') ctx.resume(); return ctx; }
+  // iOS: Web Audio is muted by the silent switch and stays locked until a tap.
+  // On the first gesture, ask for a "playback" session (ignores the switch), play a silent clip as a fallback,
+  // and wake the AudioContext so later sounds play straight away.
+  let unlocked = false;
+  function silentWav() {
+    const n = 800, b = new ArrayBuffer(44 + n * 2), v = new DataView(b), w = (o, t) => [...t].forEach((ch, i) => v.setUint8(o + i, ch.charCodeAt(0)));
+    w(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); w(8, 'WAVE'); w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, 8000, true); v.setUint32(28, 16000, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, 'data'); v.setUint32(40, n * 2, true);
+    return URL.createObjectURL(new Blob([b], { type: 'audio/wav' }));
+  }
+  function unlock() {
+    if (unlocked) return; unlocked = true;
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* not supported */ }
+    try { const el = new Audio(silentWav()); el.setAttribute('playsinline', ''); el.volume = 0.01; const p = el.play(); if (p) p.catch(() => {}); } catch (e) { /* ignore */ }
+    const c = ac(); if (c) { const src = c.createBufferSource(); src.buffer = c.createBuffer(1, 1, 22050); src.connect(c.destination); src.start(0); }
+  }
+  ['pointerdown', 'touchend', 'keydown'].forEach(t => addEventListener(t, unlock, { capture: true, passive: true }));
   function noiseBuf(c, dur) {
     const b = c.createBuffer(1, Math.ceil(c.sampleRate * dur), c.sampleRate), d = b.getChannelData(0);
     for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; return b;
   }
   function blip(kind = 'tick', force = false) {
     if (!sound.on && !force) return;
-    const c = ac(); if (!c) return; const t0 = c.currentTime;
+    const c = ac(); if (!c) return;
+    if (c.state !== 'running') { c.resume().then(() => play(c, kind)).catch(() => {}); return; }
+    play(c, kind);
+  }
+  function play(c, kind) {
+    const t0 = c.currentTime;
     if (kind === 'tick') {
       const s = c.createBufferSource(); s.buffer = noiseBuf(c, 0.05);
       const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 2200; f.Q.value = 3;
@@ -133,6 +155,7 @@
               <button class="tool" type="button" data-copy aria-label="Copy email address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button></span>
             <a class="btn ghost" href="https://www.linkedin.com/in/banuka-rajapaksha" target="_blank" rel="noopener">LinkedIn <span class="arr">↗</span></a>
             <a class="btn ghost" href="https://github.com/PrageethBanuka" target="_blank" rel="noopener">GitHub <span class="arr">↗</span></a>
+            <button class="btn" type="button" data-wa-open><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg>WhatsApp me</button>
             <span class="label" data-copy-note aria-live="polite"></span>
           </div>
           <div class="foot">
@@ -143,6 +166,28 @@
           <span class="sig sig-xl" role="img" aria-label="Signed, Prageeth" style="view-transition-name:none"></span>
         </div>
       </div></div></footer>`;
+    document.currentScript.insertAdjacentHTML('beforebegin', `
+      <div class="wa-scrim" data-wa-close></div>
+      <section class="wa" role="dialog" aria-modal="true" aria-labelledby="waTitle" inert>
+        <div class="wa-grab" aria-hidden="true"><span></span></div>
+        <div class="wa-in">
+          <div class="wa-top"><div><span class="label">Direct line · WhatsApp</span><h2 class="h3" id="waTitle">Send me a message</h2></div>
+            <button class="tool" type="button" data-wa-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+          <form class="wa-form" novalidate>
+            <label for="waName" class="label">Your name</label>
+            <input id="waName" name="name" autocomplete="name" maxlength="60" required>
+            <span class="label">About</span>
+            <div class="wa-topics" role="radiogroup" aria-label="Topic">
+              ${['Internship', 'Collaboration', 'Design work', 'Just saying hi'].map((t, i) => `<label><input type="radio" name="topic" value="${t}"${i === 3 ? ' checked' : ''}><span>${t}</span></label>`).join('')}
+            </div>
+            <label for="waMsg" class="label">Message</label>
+            <textarea id="waMsg" name="msg" rows="4" maxlength="600" required></textarea>
+            <p class="wa-err" aria-live="polite"></p>
+            <button class="btn" type="submit">Open in WhatsApp <span class="arr">→</span></button>
+            <p class="wa-note">WhatsApp opens with your message ready. Nothing is sent until you tap send there.</p>
+          </form>
+        </div>
+      </section>`);
     document.currentScript.insertAdjacentHTML('beforebegin', html);
   }
 
@@ -156,6 +201,38 @@
       sound.on = !sound.on; store.set('br-sound', sound.on ? 'on' : 'off'); document.querySelectorAll('[data-sound-toggle]').forEach(x => x.setAttribute('aria-pressed', sound.on));
       if (sound.on) blip('tone');
     }));
+    // WhatsApp sheet: rises from the bottom, drag down to dismiss
+    const wa = document.querySelector('.wa'), was = document.querySelector('.wa-scrim');
+    if (wa) {
+      const WA_NUMBER = '94716220226';
+      let H = 600; const y = new Spring(1, { damping: 1, response: 0.4 }).on(v => {
+        wa.style.transform = `translateY(${Math.max(0, v) * (H + 40) + Math.min(0, v) * 0}px)`;
+        was.style.opacity = BR.clamp(1 - v, 0, 1);
+      });
+      y.set(1);
+      const open = () => { H = wa.offsetHeight; wa.inert = false; wa.classList.add('live'); was.classList.add('live'); document.body.classList.add('menu-open'); y.to(0, { damping: 1, response: 0.42 }); setTimeout(() => wa.querySelector('#waName').focus({ preventScroll: true }), 300); blip('tick'); };
+      const close = (v) => { was.classList.remove('live'); document.body.classList.remove('menu-open'); wa.inert = true; y.to(1, { velocity: v ? v / (H + 40) : 0, damping: 1, response: 0.36, then: () => wa.classList.remove('live') }); };
+      document.querySelectorAll('[data-wa-open]').forEach(b => b.addEventListener('click', open));
+      document.querySelectorAll('[data-wa-close]').forEach(b => b.addEventListener('click', () => close()));
+      addEventListener('keydown', e => { if (e.key === 'Escape' && wa.classList.contains('live')) close(); });
+      const grab = wa.querySelector('.wa-grab'), trk = tracker(); let d0 = null;
+      grab.addEventListener('pointerdown', e => { grab.setPointerCapture(e.pointerId); d0 = e.clientY - y.x * (H + 40); trk.reset(); y.stop(); });
+      grab.addEventListener('pointermove', e => { if (d0 === null) return; const px = e.clientY - d0; const r = px < 0 ? BR.rubber(px, H) : px; y.set(r / (H + 40)); trk.add(r); });
+      const end = () => { if (d0 === null) return; d0 = null; const v = trk.vel(), land = y.x * (H + 40) + project(v); if (land > H * 0.4) close(v); else y.to(0, { velocity: v / (H + 40), damping: 0.8, response: 0.35 }); };
+      grab.addEventListener('pointerup', end); grab.addEventListener('pointercancel', end);
+      const form = wa.querySelector('form'), err = wa.querySelector('.wa-err');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const F = form.elements, name = F.namedItem('name').value.trim(), msg = F.namedItem('msg').value.trim(), topic = (form.querySelector('[name=topic]:checked') || {}).value || '';
+        if (!name) { delete err.dataset.ok; err.textContent = 'Add your name so I know who it is.'; F.namedItem('name').focus(); return; }
+        if (!msg) { delete err.dataset.ok; err.textContent = 'Write a message first.'; F.namedItem('msg').focus(); return; }
+        err.textContent = ''; delete err.dataset.ok;
+        const text = `Hi Banuka, I'm ${name}.${topic && topic !== 'Just saying hi' ? ` (${topic})` : ''}\n\n${msg}\n\n— via prageethbanuka.github.io`;
+        const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+        const w = window.open(url, '_blank', 'noopener'); if (!w) location.href = url;
+        err.dataset.ok = '1'; err.textContent = 'Opening WhatsApp. Your message is ready to send.';
+      });
+    }
     const mb = document.querySelector('.menu-btn'), mm = document.getElementById('mmenu');
     if (mb && mm) {
       const set = open => {
