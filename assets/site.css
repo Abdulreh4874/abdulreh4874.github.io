@@ -414,3 +414,16 @@ a, button, [role="button"], summary { -webkit-tap-highlight-color: transparent; 
 .refill.strong .cup i { height: 30px; }
 @keyframes jitter { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(-1px, 1px) rotate(-1deg); } 50% { transform: translate(1px, -1px); } 75% { transform: translate(1px, 1px) rotate(1deg); } }
 @media (prefers-reduced-motion: reduce) { .refill.jitter .cup { animation: none; } }
+
+/* ---------- marker highlight (same look as text selection) ---------- */
+mark.hl { color: inherit; padding: 0.02em 0.12em; margin: 0 -0.12em; border-radius: 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  background: linear-gradient(var(--accent), var(--accent)) left center / 0% 100% no-repeat;
+  transition: background-size 720ms cubic-bezier(.65, 0, .35, 1), color 180ms ease 420ms; }
+mark.hl.on { background-size: 100% 100%; color: var(--bg); }
+@media (prefers-reduced-motion: reduce) { mark.hl { transition: none; } }
+
+/* ---------- link underlines that draw in ---------- */
+.ch-meta a, .now a.more, .wa-note a, .prose a { text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) left 100% / 0% 1px no-repeat; transition: background-size var(--h) var(--ease-out); }
+.ch-meta a { background-size: 100% 1px; }
+.ch-meta a:hover, .now a.more:hover, .prose a:hover { background-size: 100% 1px; text-decoration: none; }

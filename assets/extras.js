@@ -145,6 +145,19 @@
   }
 
   BR.studyCard = show; // handy for testing: BR.studyCard(52)
-  const start = () => { focusWatch(); offhoursSpot(); tabTitle(); coffee(); hello(); };
+  /* ---------- marker highlights: sweep in once, when seen ---------- */
+  function highlights() {
+    const marks = document.querySelectorAll('mark.hl'); if (!marks.length) return;
+    if (BR.reduce() || !('IntersectionObserver' in window)) { marks.forEach(m => m.classList.add('on')); return; }
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return; io.unobserve(e.target);
+      const go = () => setTimeout(() => e.target.classList.add('on'), 450);
+      const wait = () => document.querySelector('.intro') ? setTimeout(wait, 200) : go(); // never behind the intro
+      wait();
+    }), { threshold: 1, rootMargin: '0px 0px -12% 0px' });
+    marks.forEach(m => io.observe(m));
+  }
+
+  const start = () => { highlights(); focusWatch(); offhoursSpot(); tabTitle(); coffee(); hello(); };
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', start) : start();
 })();
