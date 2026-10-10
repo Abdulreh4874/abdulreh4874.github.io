@@ -111,7 +111,57 @@
     ['experience', 'experience.html', 'Experience'],
     ['offhours', 'offhours.html', 'Off-hours'],
   ];
+  /* ---------- intro: the old site's handwritten signature, replayed from its stroke timing ---------- */
+  function intro() {
+    let seen = null; try { seen = sessionStorage.getItem('br-intro'); } catch (e) {}
+    if (seen || reduce()) return;
+    try { sessionStorage.setItem('br-intro', '1'); } catch (e) {}
+    const el = document.createElement('div'); el.className = 'intro'; el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = '<canvas></canvas><span class="label intro-skip">Tap to skip</span>';
+    document.currentScript.insertAdjacentElement('beforebegin', el);
+    const cv = el.querySelector('canvas'), c = cv.getContext('2d');
+    const img = new Image(); img.src = 'assets/signature-time.png';
+    let T, A, out, oc, w, h, start = 0, done = false, raf = 0;
+    const DRAW = 1250, HOLD = 380;
+    const finish = () => {
+      if (done) return; done = true; cancelAnimationFrame(raf);
+      el.classList.add('out'); setTimeout(() => el.remove(), 700);
+    };
+    el.addEventListener('pointerdown', finish); addEventListener('keydown', finish, { once: true });
+    setTimeout(finish, 4000); // never block the page for long, even if the image is slow
+    img.onload = () => {
+      w = img.naturalWidth; h = img.naturalHeight;
+      const t = document.createElement('canvas'); t.width = w; t.height = h; const tc = t.getContext('2d'); tc.drawImage(img, 0, 0);
+      let d; try { d = tc.getImageData(0, 0, w, h).data; } catch (e) { return finish(); }
+      T = new Uint8Array(w * h); A = new Uint8Array(w * h);
+      for (let i = 0; i < w * h; i++) { T[i] = d[i * 4]; A[i] = d[i * 4 + 3]; }
+      oc = document.createElement('canvas'); oc.width = w; oc.height = h; out = oc.getContext('2d').createImageData(w, h);
+      const dpr = Math.min(2, devicePixelRatio || 1), cw = cv.clientWidth, ch = cw * h / w;
+      cv.width = cw * dpr; cv.height = ch * dpr; c.setTransform(dpr, 0, 0, dpr, 0, 0); c.imageSmoothingQuality = 'high';
+      const ink = getComputedStyle(root).getPropertyValue('--ink').trim();
+      const tmp = document.createElement('canvas').getContext('2d'); tmp.fillStyle = ink; tmp.fillRect(0, 0, 1, 1); const [r, g, b] = tmp.getImageData(0, 0, 1, 1).data;
+      start = performance.now();
+      const frame = now => {
+        if (done) return;
+        const p = Math.min(1, (now - start) / DRAW), e = p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2; // ease in-out, like a pen
+        const edge = e * 262, o = out.data;
+        for (let i = 0; i < T.length; i++) {
+          const a = A[i]; if (!a) continue;
+          const k = Math.max(0, Math.min(1, (edge - T[i]) / 8)); // soft leading edge
+          const j = i * 4; o[j] = r; o[j + 1] = g; o[j + 2] = b; o[j + 3] = a * k;
+        }
+        oc.getContext('2d').putImageData(out, 0, 0);
+        c.clearRect(0, 0, cw, ch); c.drawImage(oc, 0, 0, cw, ch);
+        if (p < 1) raf = requestAnimationFrame(frame);
+        else { el.classList.add('lit'); setTimeout(finish, HOLD + 260); }
+      };
+      raf = requestAnimationFrame(frame);
+    };
+    img.onerror = finish;
+  }
+
   function nav(page, opts = {}) {
+    intro();
     const links = PAGES.map(([id, href, name], i) =>
       `<li><a href="${href}"${id === page ? ' aria-current="page"' : ''}><span class="n">0${i + 1}</span>${name}</a></li>`).join('');
     const themeBtn = root.dataset.mode ? '' :

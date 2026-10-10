@@ -285,3 +285,14 @@ body.menu-open .m-toast { visibility: hidden; }
 .wa-note { margin: 4px 0 0; font-size: .8rem; color: var(--ink-3); }
 @media (max-width: 860px) { .wa-form .btn { justify-self: stretch; justify-content: center; } }
 .wa-err[data-ok] { color: var(--ink-2); }
+
+/* ---------- intro (first page of a visit) ---------- */
+.intro { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: grid; place-items: center; cursor: pointer;
+  transition: clip-path 520ms var(--ease-out), opacity 520ms ease; clip-path: inset(0 0 0 0); }
+.intro canvas { width: min(340px, 72vw); aspect-ratio: 311 / 170; display: block; position: relative; }
+.intro::after { content: ""; position: absolute; left: calc(50% + min(170px, 36vw) + 10px); top: calc(50% - min(64px, 13.5vw));
+  width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 16px var(--accent); opacity: 0; transform: scale(.2); }
+.intro.lit::after { animation: ignite var(--h) var(--ease-out) forwards; }
+.intro-skip { position: absolute; bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); left: 0; right: 0; text-align: center; opacity: .7; }
+.intro.out { clip-path: inset(0 0 100% 0); opacity: .4; pointer-events: none; }
+@keyframes ignite { 0% { opacity: 0; transform: scale(.2); } 50% { opacity: 1; transform: scale(1.8); } 100% { opacity: 1; transform: scale(1); } }
