@@ -296,3 +296,44 @@ body.menu-open .m-toast { visibility: hidden; }
 .intro-skip { position: absolute; bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); left: 0; right: 0; text-align: center; opacity: .7; }
 .intro.out { clip-path: inset(0 0 100% 0); opacity: .4; pointer-events: none; }
 @keyframes ignite { 0% { opacity: 0; transform: scale(.2); } 50% { opacity: 1; transform: scale(1.8); } 100% { opacity: 1; transform: scale(1); } }
+
+/* ---------- study playlist ---------- */
+.rec { position: relative; flex: none; width: var(--s); height: var(--s); border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle, transparent 30%, rgba(255,255,255,.06) 31%, transparent 33%, rgba(255,255,255,.05) 45%, transparent 47%, rgba(255,255,255,.05) 60%, transparent 62%), #0B0E13;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.08); }
+.rec img { width: 42%; height: 42%; border-radius: 50%; object-fit: cover; }
+.rec::after { content: ""; position: absolute; width: 6%; height: 6%; border-radius: 50%; background: var(--bg); }
+.playing .rec { animation: spin 1.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.vinyl { position: fixed; z-index: 72; right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); width: min(380px, calc(100% - 32px));
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: start; padding: 14px; border-radius: 20px;
+  background: color-mix(in srgb, var(--bg) 84%, transparent); border: 1px solid var(--line); color: var(--ink);
+  backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%); box-shadow: 0 24px 60px -24px rgba(0,0,0,.5);
+  transform: translateY(130%) rotate(2deg); opacity: 0; transition: transform var(--beat) var(--ease-out), opacity var(--h); }
+.vinyl.in { transform: none; opacity: 1; }
+.vinyl .k { display: block; font-family: var(--f-mono); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
+.vinyl p { margin: 0 0 10px; font-size: .9rem; line-height: 1.45; color: var(--ink-2); }
+.vinyl p b { color: var(--ink); font-weight: 500; }
+.v-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.v-btns .btn { padding: 8px 14px; min-height: 0; font-size: .84rem; }
+.v-x { border: 0; background: none; color: var(--ink-3); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font: inherit; }
+.v-x:hover { color: var(--ink); background: var(--line); }
+.v-embed { grid-column: 1 / -1; }
+.v-embed:empty { display: none; }
+.study { margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line); display: grid; gap: 16px; }
+.study .mix { display: flex; gap: 18px; align-items: center; }
+.study .mix-t { display: block; font-weight: 600; font-stretch: 88%; letter-spacing: -0.02em; font-size: 1.4rem; margin: 2px 0 10px; }
+.refill { position: fixed; z-index: 95; left: 50%; bottom: 18%; transform: translateX(-50%); display: grid; justify-items: center; gap: 10px; pointer-events: none;
+  animation: rise var(--beat) var(--ease-out) both; transition: opacity .6s, transform .6s; }
+.refill.out { opacity: 0; transform: translate(-50%, -30px); }
+.refill .cup { position: relative; font-size: 64px; line-height: 1; }
+.refill .cup i { position: absolute; bottom: 100%; left: 40%; width: 3px; height: 22px; border-radius: 3px; background: var(--ink-3); opacity: 0; animation: steam 1.6s ease-out infinite; }
+.refill .cup i:nth-child(2) { left: 52%; animation-delay: .4s; } .refill .cup i:nth-child(3) { left: 64%; animation-delay: .8s; }
+.refill .label { color: var(--ink); background: var(--bg); padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); }
+@keyframes rise { from { opacity: 0; transform: translate(-50%, 40px) scale(.8); } }
+@keyframes steam { 0% { opacity: 0; transform: translateY(4px) scaleY(.4); } 30% { opacity: .7; } 100% { opacity: 0; transform: translate(4px, -18px) scaleY(1); } }
+@media (max-width: 600px) { .vinyl { left: 12px; right: 12px; width: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); } }
+@media (prefers-reduced-motion: reduce) { .playing .rec, .refill, .refill .cup i { animation: none; } .vinyl { transition: none; } }
+.menu-btn { flex: none; }
+.nav .here { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.refill { bottom: 34%; }
