@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap">
-<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/site.css?v=20261011c">
 <style>
 .hero { padding-block: clamp(56px, 9vw, 120px) clamp(28px, 4vw, 48px); }
 .hero .coords { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 28px; }
@@ -38,6 +38,20 @@
 .roles span { display: flex; gap: 10px; align-items: baseline; font-size: 0.95rem; color: var(--ink-2); }
 .roles b { font-weight: 500; color: var(--ink); }
 .roles i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex: none; transform: translateY(-2px); }
+@media (max-width: 860px) {
+  .hero .grid > .hang, .tuner .grid > .hang, .now-wrap .hang { display: none; }
+  .hero .coords { display: none; }
+  .hero { padding-block: 64px 32px; }
+  .hero .display { font-size: clamp(2.6rem, 11vw, 4.6rem); }
+  .cof::before { margin-bottom: 0.3em; }
+  .roles span { font-size: 0.92rem; }
+  #scope { height: 120px; }
+  #scope .rd { display: none; }
+  main .tuner { padding-block: 36px 64px; }
+  #dial { margin-bottom: 44px; }
+  #band { min-height: 0; gap: 14px; }
+  #band h2 { font-size: clamp(2.6rem, 13vw, 3.6rem); }
+}
 @media (max-width: 860px) { .hero-foot { grid-template-columns: 1fr; } .roles { justify-self: start; } .roles span { flex-wrap: wrap; gap: 2px 10px; } .hero { padding-block: 36px 28px; } .hero .coords { margin-bottom: 18px; } .hero .display { margin-bottom: 24px; } }
 
 .scope { position: relative; height: clamp(170px, 22vw, 280px); border-block: 1px solid var(--line); }
@@ -97,7 +111,7 @@
 <script data-goatcounter="https://banuka.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
-<script src="assets/site.js"></script>
+<script src="assets/site.js?v=20261011c"></script>
 <script>BR.nav('home', { draw: true })</script>
 
 <main id="main">
@@ -108,7 +122,7 @@
         <div class="coords"><span class="label">6.7951° N · 79.9008° E</span><span class="label">Moratuwa, Colombo, Sri Lanka</span><span class="label">Full-stack · DevOps · Embedded · AI</span></div>
         <h1 class="display"><span class="cof" role="button" tabindex="0" aria-label="Coffee. Pour a refill">Coffee<i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></span> runs through my <span class="cir">circuits</span><span class="dot">.</span></h1>
         <div class="hero-foot">
-          <p class="lede">I'm Banuka Rajapaksha, a computer engineer and designer in Colombo. I build systems that work in production, not just prototypes, and I design how people meet them.</p>
+          <p class="lede">I'm Banuka Rajapaksha, a computer engineer and designer in Colombo.<span class="m-hide"> I build systems that work in production, not just prototypes, and I design how people meet them.</span></p>
           <div class="roles">
             <span><i></i><b>Software Engineer Intern</b> WSO2 · OpenChoreo</span>
             <span><i style="background:var(--ink-3)"></i><b>Computer Engineering</b> University of Ruhuna</span>
@@ -149,7 +163,7 @@
     </div>
   </section>
 
-  <section class="wrap section">
+  <section class="wrap section now-wrap">
     <div class="grid">
       <div class="hang"><span class="label">Right now</span></div>
       <div class="main now">
