@@ -188,7 +188,7 @@
         <ol>${mlinks}</ol>
         <div class="mfoot">
           <div class="row">${mTheme}<button class="pill" type="button" data-sound-toggle aria-pressed="${sound.on}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>Sound</button></div>
-          <div class="row"><a class="pill" href="https://www.linkedin.com/in/banuka-rajapaksha" target="_blank" rel="noopener">LinkedIn ↗</a><a class="pill" href="https://github.com/PrageethBanuka" target="_blank" rel="noopener">GitHub ↗</a></div>
+          <div class="row"><a class="pill" href="https://www.linkedin.com/in/banuka-rajapaksha" target="_blank" rel="noopener">LinkedIn ↗</a><a class="pill" href="https://github.com/PrageethBanuka" target="_blank" rel="noopener">GitHub ↗</a><a class="pill" href="https://medium.com/@prageethbanuka2002" target="_blank" rel="noopener me">Medium ↗</a></div>
           <span class="label" data-clock>Colombo --:--</span>
         </div>
       </div>`;
@@ -205,6 +205,7 @@
               <button class="tool" type="button" data-copy aria-label="Copy email address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button></span>
             <a class="btn ghost" href="https://www.linkedin.com/in/banuka-rajapaksha" target="_blank" rel="noopener">LinkedIn <span class="arr">↗</span></a>
             <a class="btn ghost" href="https://github.com/PrageethBanuka" target="_blank" rel="noopener">GitHub <span class="arr">↗</span></a>
+            <a class="btn ghost" href="https://medium.com/@prageethbanuka2002" target="_blank" rel="noopener me">Medium <span class="arr">↗</span></a>
             <button class="btn" type="button" data-wa-open><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z"/></svg>WhatsApp me</button>
             <span class="label" data-copy-note aria-live="polite"></span>
           </div>
