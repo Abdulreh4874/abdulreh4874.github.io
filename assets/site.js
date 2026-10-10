@@ -284,6 +284,13 @@
         err.dataset.ok = '1'; err.textContent = 'Opening WhatsApp. Your message is ready to send.';
       });
     }
+    // progressive disclosure: detail folds behind a button on phones, stays open on wide screens
+    document.querySelectorAll('[data-collapse]').forEach(el => {
+      const d = document.createElement('details'); d.className = 'more';
+      d.innerHTML = `<summary>${el.dataset.collapse}</summary>`;
+      el.before(d); d.appendChild(el);
+      if (matchMedia('(min-width: 861px)').matches) d.open = true;
+    });
     const mb = document.querySelector('.menu-btn'), mm = document.getElementById('mmenu');
     if (mb && mm) {
       const set = open => {

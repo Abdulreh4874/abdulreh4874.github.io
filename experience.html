@@ -105,7 +105,7 @@
       <div class="main">
         <div class="meta-row"><span class="label">Moratuwa, Colombo</span><span class="label">Open to internships in SE, DevOps, Embedded and AI</span></div>
         <h1 class="display">Building at WSO2. Studying at Ruhuna<span class="dot">.</span></h1>
-        <p class="lede">I build systems that work in production, not just prototypes. My core is full-stack, but I like the whole picture: write the backend, deploy it, and make sure it holds up. Good engineering and good design aren't opposites.</p>
+        <p class="lede">I build systems that work in production, not just prototypes. Good engineering and good design aren't opposites.</p>
       </div>
     </div>
   </section>
@@ -119,12 +119,12 @@
         <div class="feature">
           <div class="prose">
             <h2 class="h2" id="wso2-h" style="color:var(--ink);margin-bottom:28px">Software Engineer Intern, OpenChoreo</h2>
-            <h3>The platform</h3>
-            <p>OpenChoreo is WSO2's open-source developer platform for Kubernetes. Teams describe their services, and the platform handles building, deploying and running them.</p>
+            <h3 class="m-hide">The platform</h3>
+            <p class="m-hide">OpenChoreo is WSO2's open-source developer platform for Kubernetes. Teams describe their services, and the platform handles building, deploying and running them.</p>
             <h3>My project · Progressive delivery</h3>
             <p>I'm building progressive delivery into OpenChoreo. A new version gets a small slice of real traffic first. The platform watches its health and widens the rollout only while it holds up. If it starts failing, traffic goes back to the stable version before most users notice.</p>
-            <h3>What it is teaching me</h3>
-            <p>How to ship inside a large open-source codebase: design reviews, tests that earn their keep, and release discipline.</p>
+            <h3 class="m-hide">What it is teaching me</h3>
+            <p class="m-hide">How to ship inside a large open-source codebase: design reviews, tests that earn their keep, and release discipline.</p>
           </div>
           <div>
             <dl class="facts">
@@ -245,6 +245,12 @@
 <script>
 (() => {
 const { blip, Spring, reduce } = BR;
+// leadership rows: tap to expand on phones
+document.querySelectorAll('.role').forEach(r => {
+  r.setAttribute('tabindex', '0'); r.setAttribute('role', 'button'); r.setAttribute('aria-expanded', 'false');
+  const t = () => { const o = !r.classList.contains('open'); r.classList.toggle('open', o); r.setAttribute('aria-expanded', o); };
+  r.addEventListener('click', t); r.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); t(); } });
+});
 
 /* ---------- canary rollout (concept) ---------- */
 {

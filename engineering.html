@@ -122,7 +122,7 @@
       <div class="main">
         <div class="meta-row"><span class="label">6 live channels</span><span class="label">Full-stack · DevOps · Embedded · AI</span></div>
         <h1 class="display">Things I build, running live<span class="dot">.</span></h1>
-        <p class="lede">Each channel is a working piece of a real project, rebuilt to run in your browser. My own projects come first, then team builds. Touch them, then read how they work.</p>
+        <p class="lede">Working pieces of real projects, rebuilt to run in your browser. Solo builds first, then team projects.</p>
       </div>
     </div>
   </section>
@@ -157,7 +157,7 @@
         <div class="ch-copy">
           <h2 class="h2">Pixi, and the RoboEyes that give it a face</h2>
           <p class="lede" style="font-size:1.15rem">An autonomous robot with on-device vision and a face that runs at 60 fps.</p>
-          <dl>
+          <dl data-collapse="How it works">
             <div><dt>What</dt><dd>Pixi is an autonomous robot on a Raspberry Pi. TensorFlow Lite runs its vision on the device, with no cloud round trip. For its face I ported the RoboEyes animation library to Python.</dd></div>
             <div><dt>How</dt><dd>A custom NumPy drawing engine renders each frame as an array and pushes it over SPI, skipping slow per-pixel drawing calls.</dd></div>
             <div><dt>Try</dt><dd>Move your pointer. The eyes follow, the near eye grows when they look sideways, and they blink on their own.</dd></div>
@@ -188,7 +188,7 @@
         <div class="ch-copy">
           <h2 class="h2">AdaptiFocus</h2>
           <p class="lede" style="font-size:1.15rem">A multi-agent AI that notices when a student's attention drifts, and adapts.</p>
-          <dl>
+          <dl data-collapse="How it works">
             <div><dt>What</dt><dd>An attention management platform for students. Agents watch behaviour signals, decide whether focus is slipping, and step in with the right nudge.</dd></div>
             <div><dt>How</dt><dd>Separate agents observe, analyse and coach. Real-time inference runs in Docker with Redis for fast state and Sentry watching for errors in production.</dd></div>
             <div><dt>Try</dt><dd>Read calmly and the signal rises. Scroll fast, go idle or switch tabs and watch the agents react.</dd></div>
@@ -222,7 +222,7 @@
         <div class="ch-copy">
           <h2 class="h2">SmartExpense</h2>
           <p class="lede" style="font-size:1.15rem">An expense tracker, shipped through a full CI/CD pipeline on AWS.</p>
-          <dl>
+          <dl data-collapse="How it works">
             <div><dt>What</dt><dd>A personal finance app whose real point is how it ships: every commit is built, tested, scanned and deployed without a manual step.</dd></div>
             <div><dt>How</dt><dd>Jenkins runs the pipeline. Terraform creates the AWS EC2 infrastructure as code, Ansible configures it, and a security scan can stop a release before it deploys.</dd></div>
             <div><dt>Try</dt><dd>Push a commit and follow it to production. Tick the box and push again to watch the scan block the deploy.</dd></div>
@@ -266,7 +266,7 @@
         <div class="ch-copy">
           <h2 class="h2">Dual-Layer Steganography</h2>
           <p class="lede" style="font-size:1.15rem">A message hidden inside an image, invisible to the eye.</p>
-          <dl>
+          <dl data-collapse="How it works">
             <div><dt>What</dt><dd>Hides data in the least significant bits of an image, then hardens it against automated steganalysis.</dd></div>
             <div><dt>How</dt><dd>Layer one encrypts the payload with the TEA block cipher. Layer two scatters the bits to pixel positions derived from SHA-256, so the changes look like sensor noise.</dd></div>
             <div><dt>Try</dt><dd>Type a message. It is written into the lowest bit of every pixel, which the eye cannot see. The lens shows that bit plane. Switch to Scattered: the same bits, placed in an order derived from a SHA-256 hash, now look like ordinary sensor noise.</dd></div>
@@ -304,7 +304,7 @@
         <div class="ch-copy">
           <h2 class="h2">8-bit RISC Processor</h2>
           <p class="lede" style="font-size:1.15rem">A processor designed from the instruction set up.</p>
-          <dl>
+          <dl data-collapse="How it works">
             <div><dt>What</dt><dd>Instruction set, datapath and control unit for a compact 8-bit RISC CPU.</dd></div>
             <div><dt>Try</dt><dd>Step through a Fibonacci program one instruction at a time. Watch the registers as bits. At 233 + 144 the 8-bit register overflows and the carry flag lights.</dd></div>
           </dl>
@@ -332,7 +332,7 @@
         <div class="ch-copy">
           <h2 class="h2">SDN testbed and traffic classifier</h2>
           <p class="lede" style="font-size:1.15rem">A software-defined network that knows what its traffic is.</p>
-          <dl>
+          <dl data-collapse="How it works">
             <div><dt>What</dt><dd>An SDN testbed with a flow manager, plus a machine learning model that labels each flow by type.</dd></div>
             <div><dt>Why</dt><dd>Once the controller knows a flow is a call or a video, it can give it the right path and priority.</dd></div>
           </dl>
