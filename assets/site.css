@@ -388,3 +388,22 @@ details.more[open] > summary { margin-bottom: 14px; }
   .role.open b::after { content: " −"; }
   .facts div:nth-child(1), .facts div:nth-child(2) { display: none; }
 }
+
+/* ---------- refill: truly centered, one line where it fits ---------- */
+.refill { left: 0; right: 0; margin-inline: auto; width: max-content; max-width: calc(100% - 32px); transform: none; text-align: center;
+  animation: riseC var(--beat) var(--ease-out) both; }
+.refill.out { transform: translateY(-30px); }
+.refill .label { display: inline-block; text-align: center; line-height: 1.5; padding: 8px 16px; text-wrap: balance;
+  background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 14px 34px -16px rgba(0,0,0,.5); }
+@keyframes riseC { from { opacity: 0; transform: translateY(40px) scale(.8); } }
+@media (prefers-reduced-motion: reduce) { .refill { animation: none; } }
+
+/* ---------- small polish ---------- */
+a, button, [role="button"], summary { -webkit-tap-highlight-color: transparent; }
+.cof:active { opacity: .7; }
+.mmenu a:active, .now a.more:active, .ch-index a:active, .role:active { transform: scale(0.985); transition: transform 100ms ease-out; }
+.m-toast button, .v-x { width: 40px; height: 40px; }
+@media (max-width: 600px) {
+  .m-toast { left: 12px; right: 12px; max-width: none; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); }
+}
